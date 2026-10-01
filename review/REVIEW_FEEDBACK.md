@@ -6,11 +6,11 @@ Implementation agents must **read this file before starting a new correction cyc
 
 ## Current review status
 
-Automatic assignment milestone independently reviewed.
+NEEDS_CHANGES correction cycle independently re-reviewed.
 
 Current disposition: **NEEDS_CHANGES**
 
-The baseline/diagnostic milestone remains accepted. This new disposition applies to the automatic assignment/fleet-reduction stage only. It does **not** authorize real-data acceptance, packaging, website publication, or production use.
+The previous fleet-reduction and location-ID blockers are fixed. One new soft-objective/workload-balance blocker remains before the assignment stage can proceed to real-data acceptance work.
 
 ## Review protocol
 
@@ -266,3 +266,58 @@ reports are preserved. AM handoff is an annotated road-matrix proxy; phase
 preference and targets are scoped soft heuristics, not global optimality proofs.
 Real-data/calibration/road/operational/CI gates from the Reviewer remain open.
 Exact code SHA and verification commands are in the new REVIEW_REQUEST.
+
+
+### 2026-10-02 — NEEDS_CHANGES correction re-review
+
+Reviewed:
+
+- implementation: `fb6ac2cc2dbd92f8d2b50c4de94bede6ef0c9d41`
+- evidence handoff: `31a1a75c3bfdc5f5e87d2a0ee5c7af84864d1cee`
+- reviewer baseline: `3fd6be15ee459749bed73e1eef4f6015150dbe23`
+
+Disposition: **NEEDS_CHANGES**
+
+The two previous blocking defects are materially corrected:
+
+- fleet reduction now checks all same-station donors; low-utilization only prioritizes search order;
+- subarea derivation no longer directly uses opaque location IDs to choose a greedy geographic partition, and location-renaming regression coverage is substantially improved.
+
+The configurable AM Delivery target and soft AM/PM sequencing preference are also directionally correct: hard geography/appointments/capacity still dominate, Pickup/Redeliver remain outside the normal-Delivery target, and phase preference is bounded by explicit driving slack.
+
+The 104/208-task diverse synthetic runs are useful development evidence. They remain synthetic, and no remote GitHub Actions run/status exists for the reviewed implementation SHA, so this review does not independently reproduce the reported 62/62 local pass.
+
+#### Blocking issue — AM soft target can worsen workload balance without any bound
+
+In `balance()`, a candidate move is accepted when:
+
+`(target_delta, -improvement) < (0, 0)`
+
+where `target_delta < 0` means the AM target improves and `improvement` is the reduction in station workday spread.
+
+Because tuple comparison prioritizes `target_delta`, **any** target improvement is accepted even when `improvement` is strongly negative. Therefore a soft AM target can make station workload spread arbitrarily worse, provided geography/hard constraints and the driving-detour allowance still pass.
+
+That conflicts with two project rules simultaneously:
+
+- AM delivery counts are a **soft target**, not a dominant objective;
+- workload should not become highly uneven merely to hit counts.
+
+The large spread visible in the 104/208 synthetic evidence makes this important to constrain before real-data regression, even though the evidence does not prove that this exact condition caused those spreads.
+
+Required correction:
+
+1. Keep fleet-count reduction first and hard feasibility/geography non-negotiable.
+2. For pure workload-balancing moves, do not allow AM-target improvement to cause unbounded spread worsening.
+3. Add an explicit policy, for example either:
+   - target improvement only among moves that do not worsen spread beyond a configurable tolerance; or
+   - lexicographically minimize a documented combined soft cost with an explicit maximum spread-worsening bound.
+4. Report when an AM target remains unmet because satisfying it would create unacceptable workload imbalance.
+5. Add a regression test where a target-improving move would create a very large workday spread and verify that it is rejected; also test a small/tolerated tradeoff if such tradeoffs are allowed.
+
+#### Additional cleanup before next review
+
+`business/WORK_STATUS.md` still contains an older statement saying soft AM volume targets are “reported but not an optimization term,” while the current implementation does optimize against them. Update stale lower-stage text so repository status is internally consistent.
+
+The remaining limitations are still correctly scoped: bounded search can miss better plans; real 343-task regression, road calibration, production configuration, operational geography review, remote CI and release acceptance remain unresolved.
+
+Do not package/release yet.
