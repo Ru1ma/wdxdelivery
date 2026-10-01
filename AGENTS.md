@@ -11,9 +11,12 @@ Before changing code, read:
 3. `business/WORK_STATUS.md`
 4. `business/DECISIONS.md`
 5. `docs/ACCEPTANCE.md`
-6. `review/REVIEW_REQUEST.md`
+6. `review/REVIEW_FEEDBACK.md`
+7. `review/REVIEW_REQUEST.md`
 
 If code, tests, data samples, historical outputs, or configuration are later added, inspect those before proposing a new algorithm.
+
+If `review/REVIEW_FEEDBACK.md` contains unresolved findings, treat them as required work unless they conflict with a newer explicit business decision.
 
 ## 2. Source-of-truth hierarchy
 
@@ -108,14 +111,15 @@ Before ending a task:
    - open problems,
    - next recommended step.
 2. Append material decisions/assumptions to `business/DECISIONS.md`.
-3. Update `review/REVIEW_REQUEST.md` with:
+3. Address every applicable unresolved item in `review/REVIEW_FEEDBACK.md`, but do not delete reviewer history.
+4. Update `review/REVIEW_REQUEST.md` with:
    - exact commit SHA(s),
    - files changed,
    - commands/tests run,
    - actual metrics/results,
    - known failures/limitations,
    - claims that still require independent review.
-4. Do not erase historical failures merely because a newer version improves them.
+5. Do not erase historical failures merely because a newer version improves them.
 
 ## 10. Stop conditions
 
