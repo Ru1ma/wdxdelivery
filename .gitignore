@@ -1,0 +1,46 @@
+# Secrets / local config
+.env
+.env.*
+*.pem
+*.key
+secrets/
+credentials/
+
+# Raw or potentially identifiable operational data
+data/raw/
+data/private/
+private/
+customer-data/
+*.xlsx
+*.xls
+*.xlsm
+
+# Address-level / routing caches and generated operational outputs
+*.sqlite
+*.db
+cache/
+road-cache/
+outputs/
+tmp/
+logs/
+*.log
+
+# Built binaries / release archives
+*.exe
+*.zip
+
+# Node / Python / tooling
+node_modules/
+dist/
+build/
+coverage/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
