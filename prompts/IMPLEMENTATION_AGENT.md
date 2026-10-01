@@ -12,7 +12,10 @@ Before doing anything, read these repository files in order:
 4. `business/WORK_STATUS.md`
 5. `business/DECISIONS.md`
 6. `docs/ACCEPTANCE.md`
-7. `review/REVIEW_REQUEST.md`
+7. `review/REVIEW_FEEDBACK.md`
+8. `review/REVIEW_REQUEST.md`
+
+If `review/REVIEW_FEEDBACK.md` contains unresolved findings, address them as part of the current work unless a newer explicit business decision supersedes them.
 
 Then inspect all source code, configuration, tests, raw input data, road matrices/caches, and historical outputs available in your environment.
 
@@ -82,8 +85,9 @@ Before finishing any meaningful task:
 
 1. update `business/WORK_STATUS.md`;
 2. append important assumptions/decisions to `business/DECISIONS.md`;
-3. fill `review/REVIEW_REQUEST.md` with the exact commit SHA(s), tests, metrics, known limitations and claims requiring independent review;
-4. commit all relevant changes;
-5. give the user the exact commit SHA and a concise summary.
+3. address applicable unresolved findings in `review/REVIEW_FEEDBACK.md` without deleting review history;
+4. fill `review/REVIEW_REQUEST.md` with the exact commit SHA(s), tests, metrics, known limitations and claims requiring independent review;
+5. commit all relevant changes;
+6. give the user the exact commit SHA and a concise summary.
 
 Work autonomously. When evidence is incomplete, make the safest reversible assumption, document it, and keep moving rather than inventing business facts.
