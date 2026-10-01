@@ -11,6 +11,12 @@ from pathlib import Path
 
 STATIONS = ("AMS", "ROT", "DEN HAAG", "UTRECHT", "TILBURG", "BELGEM")
 KINDS = ("Delivery", "Pickup", "Redeliver")
+GEOGRAPHY_TIME_BASIS = "base_road_minutes"
+
+
+def informative_route(route):
+    """Keep raw labels for audit; zero/blank/missing labels carry no area meaning."""
+    return route is not None and str(route).strip() not in ("", "0", "(missing)")
 
 
 def number(value, label, minimum=0):
@@ -45,6 +51,8 @@ def validate(data):
         raise ValueError("capacity and workday must be positive")
     if cfg["traffic_multiplier"] < 1:
         raise ValueError("traffic_multiplier must be >= 1")
+    if cfg.get("geography_time_basis", GEOGRAPHY_TIME_BASIS) != GEOGRAPHY_TIME_BASIS:
+        raise ValueError("geography thresholds use base_road_minutes")
     nonempty_text(cfg["evidence"], "explicit configuration evidence")
     cap = cfg["task_cap"]
     if cap is not None:
@@ -76,7 +84,8 @@ def validate(data):
             raise ValueError("task location must belong to its station")
         if task["kind"] == "Pickup" and task["pickup_location"] != task["location"]:
             raise ValueError("Pickup must use actual pickup_location")
-        if task["route"] is not None and not isinstance(task["route"], (str, int)):
+        if isinstance(task["route"], bool) or (
+                task["route"] is not None and not isinstance(task["route"], (str, int))):
             raise ValueError("Route must be a label or null")
         number(task["weight_kg"], "task weight")
         number(task["service_minutes"], "service time")
@@ -145,6 +154,8 @@ def geography(station, tasks, locations, arcs, threshold):
             (neighbors if minutes <= threshold else separate).append(item)
     distant_routes = []
     for route in sorted(route_map):
+        if not informative_route(route):
+            continue
         route_areas = sorted({locations[t["location"]]["subarea"] for t in tasks
                               if ("(missing)" if t["route"] is None else str(t["route"])) == route})
         pairs = [p for p in separate if set(p["areas"]).issubset(route_areas)]
@@ -222,11 +233,13 @@ def vehicle_report(vehicle, tasks, locations, depots, arcs, cfg):
                                 "to": locations[b["location"]]["subarea"],
                                 "minutes": arcs[a["location"], b["location"]]["minutes"]})
     routes = sorted({str(t["route"]) for t in ordered if t["route"] is not None})
+    informative = sorted({str(t["route"]) for t in ordered if informative_route(t["route"])})
     return {"id": vehicle["id"], "station": station, "metrics_available": True,
             **task_counts(ordered), "normal_deliveries_by_phase": {
                 p: sum(t["kind"] == "Delivery" and t["phase"] == p for t in ordered)
                 for p in ("AM", "PM", "flexible")},
-            "routes": routes, "cities": sorted({locations[t["location"]]["city"] for t in ordered}),
+            "routes": routes, "informative_routes": informative,
+            "cities": sorted({locations[t["location"]]["city"] for t in ordered}),
             "postcode_areas": sorted({locations[t["location"]]["postcode_area"] for t in ordered}),
             "phase_areas": phase_areas, "am_pm_transitions": transitions,
             "area_sequence": area_sequence, "area_reentries": len(area_sequence) - len(set(area_sequence)),
@@ -234,7 +247,7 @@ def vehicle_report(vehicle, tasks, locations, depots, arcs, cfg):
             "driving_minutes": driving, "service_minutes": service, "waiting_minutes": waiting,
             "loading_minutes": cfg["loading_minutes"], "work_minutes": work, "peak_kg": peak,
             "low_utilization": work < cfg["low_utilization_minutes"],
-            "more_than_two_routes": len(routes) > 2,
+            "more_than_two_routes": len(informative) > 2,
             "exceptions": vehicle.get("explanation", ""), "failures": failures}
 
 
@@ -271,6 +284,7 @@ def analyze(data):
         geo["overlapping_areas"] = {a: ids for a, ids in sorted(owners.items()) if len(ids) > 1}
         stations.append({**geo, **task_counts(ts), **totals(vs)})
     return {"evidence": {"road_basis": data["road"]["basis"], "road_source": data["road"]["source"],
+                         "geography_time_basis": GEOGRAPHY_TIME_BASIS,
                          "config": cfg, "operational_geography_review": "pending",
                          "historical_343_regression": "not run; input unavailable"},
             "integrity": {"missing": missing, "duplicates": duplicates, "unknown": unknown,
@@ -296,7 +310,10 @@ def markdown(report):
     lines = ["# Dispatch baseline diagnostic", "",
              f"Evidence basis: {report['evidence']['road_basis']}; {report['evidence']['road_source']}.",
              "Operational geography review: pending. No optimization/production acceptance claim.",
-             "Merge/redistribution search: not implemented in this baseline stage.", "",
+             "Geographic thresholds: base road minutes; scheduling: traffic-buffered minutes.",
+             "Merge analysis: " + (
+                 f"{len(report['merge_analysis'])} decisions; see section below."
+                 if isinstance(report["merge_analysis"], list) else cell(report["merge_analysis"])), "",
              "Integrity: " + json.dumps(report["integrity"], sort_keys=True),
              f"Hard constraints pass: {report['hard_constraints_pass']}", "",
              "All times below are minutes; driving applies the explicit traffic multiplier.",
@@ -324,6 +341,19 @@ def markdown(report):
         lines += table(["Task", "Subarea", "Phase", "Service start", "Service end", "Load kg"],
                        [[s[k] for k in ("task", "subarea", "phase", "service_start",
                                        "service_end", "load_kg")] for s in vehicle.get("stops", [])])
+    if "planning" in report:
+        planning = report["planning"]
+        lines += ["## Assignment and feasibility evidence", ""]
+        lines += table(["Metric", "Value"], [[k, v] for k, v in planning.items()
+                                            if k not in ("subareas", "full_day_continuity",
+                                                         "subarea_splits", "unassigned")])
+        lines += table(["Derived working subarea", "Locations"], planning["subareas"].items())
+        lines += table(["Vehicle", "Full-day continuity"], planning["full_day_continuity"].items())
+        lines += ["Subarea splits: " + cell(planning["subarea_splits"]), "",
+                  "Unassigned tasks: " + cell(planning["unassigned"]), "",
+                  "## Merge / redistribution decisions", ""]
+        for event in report["merge_analysis"]:
+            lines += [cell(event), ""]
     return "\n".join(lines).rstrip()
 
 

@@ -69,6 +69,26 @@ class BaselineTests(unittest.TestCase):
         self.assertEqual(before["stations"][5]["neighbors"], after["stations"][5]["neighbors"])
         self.assertEqual(set(after["stations"][5]["routes"]), {"0", "(missing)"})
 
+    def test_noninformative_route_labels_retained_only_for_audit(self):
+        for t in self.data["tasks"]:
+            t["route"] = " 0 " if t["kind"] == "Delivery" else None
+        r = analyze(self.data)
+        self.assertEqual(set(r["stations"][0]["routes"]), {" 0 ", "(missing)"})
+        self.assertTrue(all(not s["distant_routes"] for s in r["stations"]))
+        self.assertTrue(all(not v["more_than_two_routes"] for v in r["vehicles"]))
+        self.assertTrue(all(not v["informative_routes"] for v in r["vehicles"]))
+
+    def test_raw_geography_thresholds_are_separate_from_buffered_scheduling(self):
+        before = analyze(self.data)
+        self.data["config"]["traffic_multiplier"] = 2
+        after = analyze(self.data)
+        self.assertEqual(before["stations"][0]["neighbors"], after["stations"][0]["neighbors"])
+        for a, b in zip(before["vehicles"], after["vehicles"]):
+            self.assertEqual(a["cross_region_jumps"], b["cross_region_jumps"])
+        self.assertEqual(after["evidence"]["geography_time_basis"], "base_road_minutes")
+        self.assertAlmostEqual(after["summary"]["driving_minutes"],
+                               before["summary"]["driving_minutes"] / 1.2 * 2)
+
     def test_pickup_actual_location_required(self):
         self.data["tasks"][2]["pickup_location"] = "s0c"
         with self.assertRaisesRegex(ValueError, "actual pickup"):

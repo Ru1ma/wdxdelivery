@@ -134,3 +134,38 @@ Proceed directly to the automatic geography-first assignment/merge engine using 
 No unresolved reviewer findings were present at intake. Baseline tooling and
 synthetic evidence were submitted for independent review; see REVIEW_REQUEST.md.
 This note is an implementation status update, not an independent disposition.
+
+## Implementation response — automatic assignment stage, 2026-10-01
+
+The above reviewer history and READY_FOR_NEXT_STAGE disposition are preserved.
+This response describes implementation work awaiting new independent review.
+
+1. Route semantics: baseline raw distributions retain 0/missing/blank, while
+   informative_routes and distant-Route findings exclude them. The automatic
+   engine never uses Route labels for grouping/ties. Diagnostic and assignment
+   tests cover zero/missing/renumbering and raw audit preservation.
+2. Traffic semantics: explicitly choose base_road_minutes for all geographic
+   thresholds/diagnostics/graph/diameter and traffic-buffered scheduling/costs.
+   Reports expose the policy; a contradictory config policy is rejected. Tests
+   vary the multiplier and verify the geographic graph/thresholds remain fixed.
+3. Automatic engine: wdxdelivery/planner.py derives city/postcode road subareas
+   and connected compact vehicle territories, schedules the full day, balances
+   adjacent subareas and reduces fleet through actual merge/redistribution.
+   It ignores predeclared vehicle/subarea assignments. Acceptance-level tests now
+   cover territory invariance, large-Route splits, distant Route rejection,
+   strict appointment splits/reentries, AM/PM, task types and >2 informative Routes.
+4. Territory compactness: all-cross-pair graph links, complete-link seed splitting,
+   whole-vehicle road diameter and full-day driving-detour checks supplement
+   candidate adjacency. Counterexamples cover misleading close boundaries,
+   connected-but-dispersed chains and dispersed city/postcode seeds.
+5. Low utilization: attempts adjacent merges and whole-location redistribution
+   across recipients, emitting concrete geographic/capacity/appointment/workday/
+   count/detour blockers or budget-limited search status. Tests verify successful
+   merge, blocked merge, redistribution reduction and neighboring workload balance.
+
+49 tests pass locally; small exhaustive/randomized scheduling oracles and a
+90-task invented scale check pass. New reproducible paired evidence retains six
+appointment-required reentries and six geography-blocked low-use vehicles.
+Exact implementation SHA, commands, metrics/tradeoffs and limitations are in the
+new REVIEW_REQUEST.md. No remote CI, real 343-task regression, operational or
+release acceptance claim; those original real-data gates remain unresolved.

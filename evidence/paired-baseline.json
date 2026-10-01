@@ -1,0 +1,1457 @@
+{
+  "evidence": {
+    "config": {
+      "adjacency_minutes": 15,
+      "capacity_kg": 400,
+      "evidence": "Invented test parameters; no verified operational configuration.",
+      "loading_minutes": 15,
+      "low_utilization_minutes": 300,
+      "max_work_minutes": 600,
+      "task_cap": null,
+      "traffic_multiplier": 1.2
+    },
+    "geography_time_basis": "base_road_minutes",
+    "historical_343_regression": "not run; input unavailable",
+    "operational_geography_review": "pending",
+    "road_basis": "synthetic",
+    "road_source": "Invented symmetric travel table, not real road travel."
+  },
+  "hard_constraints_pass": true,
+  "integrity": {
+    "cross_station": 0,
+    "duplicates": {},
+    "missing": [],
+    "unknown": []
+  },
+  "merge_analysis": "not implemented in baseline stage; no impossibility claim",
+  "stations": [
+    {
+      "Delivery": 3,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "data_available": true,
+      "dispersed_subareas": [],
+      "distant_routes": [],
+      "driving_minutes": 294.0,
+      "km": 196.0,
+      "longest_minutes": 358.0,
+      "metrics_available": true,
+      "neighbors": [
+        {
+          "areas": [
+            "alpha",
+            "beta"
+          ],
+          "minutes": 10
+        }
+      ],
+      "overlapping_areas": {},
+      "routes": {
+        "(missing)": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "0": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        },
+        "1": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "2": {
+          "Invented gamma": [
+            "TEST-gamma"
+          ]
+        },
+        "5": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        }
+      },
+      "separate_areas": [
+        {
+          "areas": [
+            "alpha",
+            "gamma"
+          ],
+          "minutes": 80
+        },
+        {
+          "areas": [
+            "beta",
+            "gamma"
+          ],
+          "minutes": 70
+        }
+      ],
+      "service_minutes": 50,
+      "shortest_minutes": 296.0,
+      "spread_minutes": 62.0,
+      "station": "AMS",
+      "total_tasks": 5,
+      "vehicles": 2,
+      "waiting_minutes": 280.0,
+      "work_minutes": 654.0
+    },
+    {
+      "Delivery": 3,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "data_available": true,
+      "dispersed_subareas": [],
+      "distant_routes": [],
+      "driving_minutes": 294.0,
+      "km": 196.0,
+      "longest_minutes": 358.0,
+      "metrics_available": true,
+      "neighbors": [
+        {
+          "areas": [
+            "alpha",
+            "beta"
+          ],
+          "minutes": 10
+        }
+      ],
+      "overlapping_areas": {},
+      "routes": {
+        "(missing)": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "0": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        },
+        "1": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "2": {
+          "Invented gamma": [
+            "TEST-gamma"
+          ]
+        },
+        "5": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        }
+      },
+      "separate_areas": [
+        {
+          "areas": [
+            "alpha",
+            "gamma"
+          ],
+          "minutes": 80
+        },
+        {
+          "areas": [
+            "beta",
+            "gamma"
+          ],
+          "minutes": 70
+        }
+      ],
+      "service_minutes": 50,
+      "shortest_minutes": 296.0,
+      "spread_minutes": 62.0,
+      "station": "ROT",
+      "total_tasks": 5,
+      "vehicles": 2,
+      "waiting_minutes": 280.0,
+      "work_minutes": 654.0
+    },
+    {
+      "Delivery": 3,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "data_available": true,
+      "dispersed_subareas": [],
+      "distant_routes": [],
+      "driving_minutes": 294.0,
+      "km": 196.0,
+      "longest_minutes": 358.0,
+      "metrics_available": true,
+      "neighbors": [
+        {
+          "areas": [
+            "alpha",
+            "beta"
+          ],
+          "minutes": 10
+        }
+      ],
+      "overlapping_areas": {},
+      "routes": {
+        "(missing)": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "0": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        },
+        "1": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "2": {
+          "Invented gamma": [
+            "TEST-gamma"
+          ]
+        },
+        "5": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        }
+      },
+      "separate_areas": [
+        {
+          "areas": [
+            "alpha",
+            "gamma"
+          ],
+          "minutes": 80
+        },
+        {
+          "areas": [
+            "beta",
+            "gamma"
+          ],
+          "minutes": 70
+        }
+      ],
+      "service_minutes": 50,
+      "shortest_minutes": 296.0,
+      "spread_minutes": 62.0,
+      "station": "DEN HAAG",
+      "total_tasks": 5,
+      "vehicles": 2,
+      "waiting_minutes": 280.0,
+      "work_minutes": 654.0
+    },
+    {
+      "Delivery": 3,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "data_available": true,
+      "dispersed_subareas": [],
+      "distant_routes": [],
+      "driving_minutes": 294.0,
+      "km": 196.0,
+      "longest_minutes": 358.0,
+      "metrics_available": true,
+      "neighbors": [
+        {
+          "areas": [
+            "alpha",
+            "beta"
+          ],
+          "minutes": 10
+        }
+      ],
+      "overlapping_areas": {},
+      "routes": {
+        "(missing)": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "0": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        },
+        "1": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "2": {
+          "Invented gamma": [
+            "TEST-gamma"
+          ]
+        },
+        "5": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        }
+      },
+      "separate_areas": [
+        {
+          "areas": [
+            "alpha",
+            "gamma"
+          ],
+          "minutes": 80
+        },
+        {
+          "areas": [
+            "beta",
+            "gamma"
+          ],
+          "minutes": 70
+        }
+      ],
+      "service_minutes": 50,
+      "shortest_minutes": 296.0,
+      "spread_minutes": 62.0,
+      "station": "UTRECHT",
+      "total_tasks": 5,
+      "vehicles": 2,
+      "waiting_minutes": 280.0,
+      "work_minutes": 654.0
+    },
+    {
+      "Delivery": 3,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "data_available": true,
+      "dispersed_subareas": [],
+      "distant_routes": [],
+      "driving_minutes": 294.0,
+      "km": 196.0,
+      "longest_minutes": 358.0,
+      "metrics_available": true,
+      "neighbors": [
+        {
+          "areas": [
+            "alpha",
+            "beta"
+          ],
+          "minutes": 10
+        }
+      ],
+      "overlapping_areas": {},
+      "routes": {
+        "(missing)": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "0": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        },
+        "1": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "2": {
+          "Invented gamma": [
+            "TEST-gamma"
+          ]
+        },
+        "5": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        }
+      },
+      "separate_areas": [
+        {
+          "areas": [
+            "alpha",
+            "gamma"
+          ],
+          "minutes": 80
+        },
+        {
+          "areas": [
+            "beta",
+            "gamma"
+          ],
+          "minutes": 70
+        }
+      ],
+      "service_minutes": 50,
+      "shortest_minutes": 296.0,
+      "spread_minutes": 62.0,
+      "station": "TILBURG",
+      "total_tasks": 5,
+      "vehicles": 2,
+      "waiting_minutes": 280.0,
+      "work_minutes": 654.0
+    },
+    {
+      "Delivery": 3,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "data_available": true,
+      "dispersed_subareas": [],
+      "distant_routes": [],
+      "driving_minutes": 294.0,
+      "km": 196.0,
+      "longest_minutes": 358.0,
+      "metrics_available": true,
+      "neighbors": [
+        {
+          "areas": [
+            "alpha",
+            "beta"
+          ],
+          "minutes": 10
+        }
+      ],
+      "overlapping_areas": {},
+      "routes": {
+        "(missing)": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "0": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        },
+        "1": {
+          "Invented alpha": [
+            "TEST-alpha"
+          ]
+        },
+        "2": {
+          "Invented gamma": [
+            "TEST-gamma"
+          ]
+        },
+        "5": {
+          "Invented beta": [
+            "TEST-beta"
+          ]
+        }
+      },
+      "separate_areas": [
+        {
+          "areas": [
+            "alpha",
+            "gamma"
+          ],
+          "minutes": 80
+        },
+        {
+          "areas": [
+            "beta",
+            "gamma"
+          ],
+          "minutes": 70
+        }
+      ],
+      "service_minutes": 50,
+      "shortest_minutes": 296.0,
+      "spread_minutes": 62.0,
+      "station": "BELGEM",
+      "total_tasks": 5,
+      "vehicles": 2,
+      "waiting_minutes": 280.0,
+      "work_minutes": 654.0
+    }
+  ],
+  "summary": {
+    "Delivery": 18,
+    "Pickup": 6,
+    "Redeliver": 6,
+    "driving_minutes": 1764.0,
+    "km": 1176.0,
+    "longest_minutes": 358.0,
+    "metrics_available": true,
+    "service_minutes": 300,
+    "shortest_minutes": 296.0,
+    "spread_minutes": 62.0,
+    "total_tasks": 30,
+    "vehicles": 12,
+    "waiting_minutes": 1680.0,
+    "work_minutes": 3924.0
+  },
+  "vehicles": [
+    {
+      "Delivery": 1,
+      "Pickup": 0,
+      "Redeliver": 0,
+      "am_pm_transitions": [],
+      "area_reentries": 0,
+      "area_sequence": [
+        "gamma"
+      ],
+      "cities": [
+        "Invented gamma"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 216.0,
+      "exceptions": "Synthetic remote territory; merge not tested.",
+      "failures": [],
+      "id": "AMS-far",
+      "informative_routes": [
+        "2"
+      ],
+      "km": 144.0,
+      "loading_minutes": 15,
+      "low_utilization": false,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 0,
+        "PM": 1,
+        "flexible": 0
+      },
+      "peak_kg": 100,
+      "phase_areas": {
+        "AM": [],
+        "PM": [
+          "gamma"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-gamma"
+      ],
+      "routes": [
+        "2"
+      ],
+      "service_minutes": 10,
+      "station": "AMS",
+      "stops": [
+        {
+          "load_kg": 0,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "gamma",
+          "task": "s0t5"
+        }
+      ],
+      "total_tasks": 1,
+      "waiting_minutes": 117.0,
+      "work_minutes": 358.0
+    },
+    {
+      "Delivery": 2,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "am_pm_transitions": [
+        {
+          "from": "beta",
+          "minutes": 10,
+          "to": "alpha"
+        }
+      ],
+      "area_reentries": 2,
+      "area_sequence": [
+        "alpha",
+        "beta",
+        "alpha",
+        "beta"
+      ],
+      "cities": [
+        "Invented alpha",
+        "Invented beta"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 78.0,
+      "exceptions": "Synthetic supplied baseline; alpha/beta reentry deliberately retained.",
+      "failures": [],
+      "id": "AMS-near",
+      "informative_routes": [
+        "1",
+        "5"
+      ],
+      "km": 52.0,
+      "loading_minutes": 15,
+      "low_utilization": true,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 2,
+        "PM": 0,
+        "flexible": 0
+      },
+      "peak_kg": 300,
+      "phase_areas": {
+        "AM": [
+          "alpha",
+          "beta"
+        ],
+        "PM": [
+          "alpha",
+          "beta"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-alpha",
+        "TEST-beta"
+      ],
+      "routes": [
+        "0",
+        "1",
+        "5"
+      ],
+      "service_minutes": 40,
+      "station": "AMS",
+      "stops": [
+        {
+          "load_kg": 200,
+          "phase": "AM",
+          "service_end": 43.0,
+          "service_start": 33.0,
+          "subarea": "alpha",
+          "task": "s0t1"
+        },
+        {
+          "load_kg": 100,
+          "phase": "AM",
+          "service_end": 65.0,
+          "service_start": 55.0,
+          "subarea": "beta",
+          "task": "s0t2"
+        },
+        {
+          "load_kg": 150,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "alpha",
+          "task": "s0t3"
+        },
+        {
+          "load_kg": 50,
+          "phase": "PM",
+          "service_end": 272.0,
+          "service_start": 262.0,
+          "subarea": "beta",
+          "task": "s0t4"
+        }
+      ],
+      "total_tasks": 4,
+      "waiting_minutes": 163.0,
+      "work_minutes": 296.0
+    },
+    {
+      "Delivery": 1,
+      "Pickup": 0,
+      "Redeliver": 0,
+      "am_pm_transitions": [],
+      "area_reentries": 0,
+      "area_sequence": [
+        "gamma"
+      ],
+      "cities": [
+        "Invented gamma"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 216.0,
+      "exceptions": "Synthetic remote territory; merge not tested.",
+      "failures": [],
+      "id": "BELGEM-far",
+      "informative_routes": [
+        "2"
+      ],
+      "km": 144.0,
+      "loading_minutes": 15,
+      "low_utilization": false,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 0,
+        "PM": 1,
+        "flexible": 0
+      },
+      "peak_kg": 100,
+      "phase_areas": {
+        "AM": [],
+        "PM": [
+          "gamma"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-gamma"
+      ],
+      "routes": [
+        "2"
+      ],
+      "service_minutes": 10,
+      "station": "BELGEM",
+      "stops": [
+        {
+          "load_kg": 0,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "gamma",
+          "task": "s5t5"
+        }
+      ],
+      "total_tasks": 1,
+      "waiting_minutes": 117.0,
+      "work_minutes": 358.0
+    },
+    {
+      "Delivery": 2,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "am_pm_transitions": [
+        {
+          "from": "beta",
+          "minutes": 10,
+          "to": "alpha"
+        }
+      ],
+      "area_reentries": 2,
+      "area_sequence": [
+        "alpha",
+        "beta",
+        "alpha",
+        "beta"
+      ],
+      "cities": [
+        "Invented alpha",
+        "Invented beta"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 78.0,
+      "exceptions": "Synthetic supplied baseline; alpha/beta reentry deliberately retained.",
+      "failures": [],
+      "id": "BELGEM-near",
+      "informative_routes": [
+        "1",
+        "5"
+      ],
+      "km": 52.0,
+      "loading_minutes": 15,
+      "low_utilization": true,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 2,
+        "PM": 0,
+        "flexible": 0
+      },
+      "peak_kg": 300,
+      "phase_areas": {
+        "AM": [
+          "alpha",
+          "beta"
+        ],
+        "PM": [
+          "alpha",
+          "beta"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-alpha",
+        "TEST-beta"
+      ],
+      "routes": [
+        "0",
+        "1",
+        "5"
+      ],
+      "service_minutes": 40,
+      "station": "BELGEM",
+      "stops": [
+        {
+          "load_kg": 200,
+          "phase": "AM",
+          "service_end": 43.0,
+          "service_start": 33.0,
+          "subarea": "alpha",
+          "task": "s5t1"
+        },
+        {
+          "load_kg": 100,
+          "phase": "AM",
+          "service_end": 65.0,
+          "service_start": 55.0,
+          "subarea": "beta",
+          "task": "s5t2"
+        },
+        {
+          "load_kg": 150,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "alpha",
+          "task": "s5t3"
+        },
+        {
+          "load_kg": 50,
+          "phase": "PM",
+          "service_end": 272.0,
+          "service_start": 262.0,
+          "subarea": "beta",
+          "task": "s5t4"
+        }
+      ],
+      "total_tasks": 4,
+      "waiting_minutes": 163.0,
+      "work_minutes": 296.0
+    },
+    {
+      "Delivery": 1,
+      "Pickup": 0,
+      "Redeliver": 0,
+      "am_pm_transitions": [],
+      "area_reentries": 0,
+      "area_sequence": [
+        "gamma"
+      ],
+      "cities": [
+        "Invented gamma"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 216.0,
+      "exceptions": "Synthetic remote territory; merge not tested.",
+      "failures": [],
+      "id": "DEN HAAG-far",
+      "informative_routes": [
+        "2"
+      ],
+      "km": 144.0,
+      "loading_minutes": 15,
+      "low_utilization": false,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 0,
+        "PM": 1,
+        "flexible": 0
+      },
+      "peak_kg": 100,
+      "phase_areas": {
+        "AM": [],
+        "PM": [
+          "gamma"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-gamma"
+      ],
+      "routes": [
+        "2"
+      ],
+      "service_minutes": 10,
+      "station": "DEN HAAG",
+      "stops": [
+        {
+          "load_kg": 0,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "gamma",
+          "task": "s2t5"
+        }
+      ],
+      "total_tasks": 1,
+      "waiting_minutes": 117.0,
+      "work_minutes": 358.0
+    },
+    {
+      "Delivery": 2,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "am_pm_transitions": [
+        {
+          "from": "beta",
+          "minutes": 10,
+          "to": "alpha"
+        }
+      ],
+      "area_reentries": 2,
+      "area_sequence": [
+        "alpha",
+        "beta",
+        "alpha",
+        "beta"
+      ],
+      "cities": [
+        "Invented alpha",
+        "Invented beta"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 78.0,
+      "exceptions": "Synthetic supplied baseline; alpha/beta reentry deliberately retained.",
+      "failures": [],
+      "id": "DEN HAAG-near",
+      "informative_routes": [
+        "1",
+        "5"
+      ],
+      "km": 52.0,
+      "loading_minutes": 15,
+      "low_utilization": true,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 2,
+        "PM": 0,
+        "flexible": 0
+      },
+      "peak_kg": 300,
+      "phase_areas": {
+        "AM": [
+          "alpha",
+          "beta"
+        ],
+        "PM": [
+          "alpha",
+          "beta"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-alpha",
+        "TEST-beta"
+      ],
+      "routes": [
+        "0",
+        "1",
+        "5"
+      ],
+      "service_minutes": 40,
+      "station": "DEN HAAG",
+      "stops": [
+        {
+          "load_kg": 200,
+          "phase": "AM",
+          "service_end": 43.0,
+          "service_start": 33.0,
+          "subarea": "alpha",
+          "task": "s2t1"
+        },
+        {
+          "load_kg": 100,
+          "phase": "AM",
+          "service_end": 65.0,
+          "service_start": 55.0,
+          "subarea": "beta",
+          "task": "s2t2"
+        },
+        {
+          "load_kg": 150,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "alpha",
+          "task": "s2t3"
+        },
+        {
+          "load_kg": 50,
+          "phase": "PM",
+          "service_end": 272.0,
+          "service_start": 262.0,
+          "subarea": "beta",
+          "task": "s2t4"
+        }
+      ],
+      "total_tasks": 4,
+      "waiting_minutes": 163.0,
+      "work_minutes": 296.0
+    },
+    {
+      "Delivery": 1,
+      "Pickup": 0,
+      "Redeliver": 0,
+      "am_pm_transitions": [],
+      "area_reentries": 0,
+      "area_sequence": [
+        "gamma"
+      ],
+      "cities": [
+        "Invented gamma"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 216.0,
+      "exceptions": "Synthetic remote territory; merge not tested.",
+      "failures": [],
+      "id": "ROT-far",
+      "informative_routes": [
+        "2"
+      ],
+      "km": 144.0,
+      "loading_minutes": 15,
+      "low_utilization": false,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 0,
+        "PM": 1,
+        "flexible": 0
+      },
+      "peak_kg": 100,
+      "phase_areas": {
+        "AM": [],
+        "PM": [
+          "gamma"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-gamma"
+      ],
+      "routes": [
+        "2"
+      ],
+      "service_minutes": 10,
+      "station": "ROT",
+      "stops": [
+        {
+          "load_kg": 0,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "gamma",
+          "task": "s1t5"
+        }
+      ],
+      "total_tasks": 1,
+      "waiting_minutes": 117.0,
+      "work_minutes": 358.0
+    },
+    {
+      "Delivery": 2,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "am_pm_transitions": [
+        {
+          "from": "beta",
+          "minutes": 10,
+          "to": "alpha"
+        }
+      ],
+      "area_reentries": 2,
+      "area_sequence": [
+        "alpha",
+        "beta",
+        "alpha",
+        "beta"
+      ],
+      "cities": [
+        "Invented alpha",
+        "Invented beta"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 78.0,
+      "exceptions": "Synthetic supplied baseline; alpha/beta reentry deliberately retained.",
+      "failures": [],
+      "id": "ROT-near",
+      "informative_routes": [
+        "1",
+        "5"
+      ],
+      "km": 52.0,
+      "loading_minutes": 15,
+      "low_utilization": true,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 2,
+        "PM": 0,
+        "flexible": 0
+      },
+      "peak_kg": 300,
+      "phase_areas": {
+        "AM": [
+          "alpha",
+          "beta"
+        ],
+        "PM": [
+          "alpha",
+          "beta"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-alpha",
+        "TEST-beta"
+      ],
+      "routes": [
+        "0",
+        "1",
+        "5"
+      ],
+      "service_minutes": 40,
+      "station": "ROT",
+      "stops": [
+        {
+          "load_kg": 200,
+          "phase": "AM",
+          "service_end": 43.0,
+          "service_start": 33.0,
+          "subarea": "alpha",
+          "task": "s1t1"
+        },
+        {
+          "load_kg": 100,
+          "phase": "AM",
+          "service_end": 65.0,
+          "service_start": 55.0,
+          "subarea": "beta",
+          "task": "s1t2"
+        },
+        {
+          "load_kg": 150,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "alpha",
+          "task": "s1t3"
+        },
+        {
+          "load_kg": 50,
+          "phase": "PM",
+          "service_end": 272.0,
+          "service_start": 262.0,
+          "subarea": "beta",
+          "task": "s1t4"
+        }
+      ],
+      "total_tasks": 4,
+      "waiting_minutes": 163.0,
+      "work_minutes": 296.0
+    },
+    {
+      "Delivery": 1,
+      "Pickup": 0,
+      "Redeliver": 0,
+      "am_pm_transitions": [],
+      "area_reentries": 0,
+      "area_sequence": [
+        "gamma"
+      ],
+      "cities": [
+        "Invented gamma"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 216.0,
+      "exceptions": "Synthetic remote territory; merge not tested.",
+      "failures": [],
+      "id": "TILBURG-far",
+      "informative_routes": [
+        "2"
+      ],
+      "km": 144.0,
+      "loading_minutes": 15,
+      "low_utilization": false,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 0,
+        "PM": 1,
+        "flexible": 0
+      },
+      "peak_kg": 100,
+      "phase_areas": {
+        "AM": [],
+        "PM": [
+          "gamma"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-gamma"
+      ],
+      "routes": [
+        "2"
+      ],
+      "service_minutes": 10,
+      "station": "TILBURG",
+      "stops": [
+        {
+          "load_kg": 0,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "gamma",
+          "task": "s4t5"
+        }
+      ],
+      "total_tasks": 1,
+      "waiting_minutes": 117.0,
+      "work_minutes": 358.0
+    },
+    {
+      "Delivery": 2,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "am_pm_transitions": [
+        {
+          "from": "beta",
+          "minutes": 10,
+          "to": "alpha"
+        }
+      ],
+      "area_reentries": 2,
+      "area_sequence": [
+        "alpha",
+        "beta",
+        "alpha",
+        "beta"
+      ],
+      "cities": [
+        "Invented alpha",
+        "Invented beta"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 78.0,
+      "exceptions": "Synthetic supplied baseline; alpha/beta reentry deliberately retained.",
+      "failures": [],
+      "id": "TILBURG-near",
+      "informative_routes": [
+        "1",
+        "5"
+      ],
+      "km": 52.0,
+      "loading_minutes": 15,
+      "low_utilization": true,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 2,
+        "PM": 0,
+        "flexible": 0
+      },
+      "peak_kg": 300,
+      "phase_areas": {
+        "AM": [
+          "alpha",
+          "beta"
+        ],
+        "PM": [
+          "alpha",
+          "beta"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-alpha",
+        "TEST-beta"
+      ],
+      "routes": [
+        "0",
+        "1",
+        "5"
+      ],
+      "service_minutes": 40,
+      "station": "TILBURG",
+      "stops": [
+        {
+          "load_kg": 200,
+          "phase": "AM",
+          "service_end": 43.0,
+          "service_start": 33.0,
+          "subarea": "alpha",
+          "task": "s4t1"
+        },
+        {
+          "load_kg": 100,
+          "phase": "AM",
+          "service_end": 65.0,
+          "service_start": 55.0,
+          "subarea": "beta",
+          "task": "s4t2"
+        },
+        {
+          "load_kg": 150,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "alpha",
+          "task": "s4t3"
+        },
+        {
+          "load_kg": 50,
+          "phase": "PM",
+          "service_end": 272.0,
+          "service_start": 262.0,
+          "subarea": "beta",
+          "task": "s4t4"
+        }
+      ],
+      "total_tasks": 4,
+      "waiting_minutes": 163.0,
+      "work_minutes": 296.0
+    },
+    {
+      "Delivery": 1,
+      "Pickup": 0,
+      "Redeliver": 0,
+      "am_pm_transitions": [],
+      "area_reentries": 0,
+      "area_sequence": [
+        "gamma"
+      ],
+      "cities": [
+        "Invented gamma"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 216.0,
+      "exceptions": "Synthetic remote territory; merge not tested.",
+      "failures": [],
+      "id": "UTRECHT-far",
+      "informative_routes": [
+        "2"
+      ],
+      "km": 144.0,
+      "loading_minutes": 15,
+      "low_utilization": false,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 0,
+        "PM": 1,
+        "flexible": 0
+      },
+      "peak_kg": 100,
+      "phase_areas": {
+        "AM": [],
+        "PM": [
+          "gamma"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-gamma"
+      ],
+      "routes": [
+        "2"
+      ],
+      "service_minutes": 10,
+      "station": "UTRECHT",
+      "stops": [
+        {
+          "load_kg": 0,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "gamma",
+          "task": "s3t5"
+        }
+      ],
+      "total_tasks": 1,
+      "waiting_minutes": 117.0,
+      "work_minutes": 358.0
+    },
+    {
+      "Delivery": 2,
+      "Pickup": 1,
+      "Redeliver": 1,
+      "am_pm_transitions": [
+        {
+          "from": "beta",
+          "minutes": 10,
+          "to": "alpha"
+        }
+      ],
+      "area_reentries": 2,
+      "area_sequence": [
+        "alpha",
+        "beta",
+        "alpha",
+        "beta"
+      ],
+      "cities": [
+        "Invented alpha",
+        "Invented beta"
+      ],
+      "cross_region_jumps": [],
+      "driving_minutes": 78.0,
+      "exceptions": "Synthetic supplied baseline; alpha/beta reentry deliberately retained.",
+      "failures": [],
+      "id": "UTRECHT-near",
+      "informative_routes": [
+        "1",
+        "5"
+      ],
+      "km": 52.0,
+      "loading_minutes": 15,
+      "low_utilization": true,
+      "metrics_available": true,
+      "more_than_two_routes": false,
+      "normal_deliveries_by_phase": {
+        "AM": 2,
+        "PM": 0,
+        "flexible": 0
+      },
+      "peak_kg": 300,
+      "phase_areas": {
+        "AM": [
+          "alpha",
+          "beta"
+        ],
+        "PM": [
+          "alpha",
+          "beta"
+        ],
+        "flexible": []
+      },
+      "postcode_areas": [
+        "TEST-alpha",
+        "TEST-beta"
+      ],
+      "routes": [
+        "0",
+        "1",
+        "5"
+      ],
+      "service_minutes": 40,
+      "station": "UTRECHT",
+      "stops": [
+        {
+          "load_kg": 200,
+          "phase": "AM",
+          "service_end": 43.0,
+          "service_start": 33.0,
+          "subarea": "alpha",
+          "task": "s3t1"
+        },
+        {
+          "load_kg": 100,
+          "phase": "AM",
+          "service_end": 65.0,
+          "service_start": 55.0,
+          "subarea": "beta",
+          "task": "s3t2"
+        },
+        {
+          "load_kg": 150,
+          "phase": "PM",
+          "service_end": 250.0,
+          "service_start": 240.0,
+          "subarea": "alpha",
+          "task": "s3t3"
+        },
+        {
+          "load_kg": 50,
+          "phase": "PM",
+          "service_end": 272.0,
+          "service_start": 262.0,
+          "subarea": "beta",
+          "task": "s3t4"
+        }
+      ],
+      "total_tasks": 4,
+      "waiting_minutes": 163.0,
+      "work_minutes": 296.0
+    }
+  ]
+}

@@ -39,12 +39,21 @@ Normal loop:
 
 Real customer/order data should stay outside this public repository unless irreversibly sanitized.
 
-## Reproducible baseline diagnostics
+## Reproducible diagnostics and automatic assignment
 
-The initial runner validates a supplied ordered plan and reports six-station
-geography and workload evidence. It does not assign vehicles automatically.
+The baseline runner validates a supplied ordered plan and reports six-station
+geography and workload evidence. The automatic planner derives working subareas
+from city/postcode and road relationships, creates connected vehicle territories,
+orders tasks under constraints, and tests adjacent merges/redistribution.
 See [input contract and commands](docs/BASELINE_INPUT.md). The committed
 examples/evidence use wholly invented data; real operational validation and the
 343-task historical regression are pending.
+
+Run automatic assignment (Python standard library only):
+
+    python3 -m wdxdelivery.planner examples/assignment-input.json --plan outputs/plan.json --json outputs/report.json --markdown outputs/report.md
+
+See [assignment search and limitations](docs/ASSIGNMENT.md). Historical baseline
+evidence remains intact; revised diagnostics and paired comparisons have new names.
 
 Do not claim the project is optimized merely because tests pass. Hard-constraint correctness and operational route quality are separate acceptance layers.

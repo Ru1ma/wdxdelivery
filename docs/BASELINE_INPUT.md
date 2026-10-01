@@ -63,6 +63,17 @@ pair has travel within the configured threshold **in both directions**. This
 reports possible road connections, not proof of a compact territory; dispersed
 subareas are separately reported. Numeric postcode order is never a distance.
 
+All geography thresholds, separation/dispersion metrics, cross-region-jump
+flags and AM/PM leg diagnostics use **base road minutes**. Scheduling and driving
+totals use traffic-buffered minutes. The fixed policy is exposed as
+geography_time_basis=base_road_minutes in every report; an explicit conflicting
+config policy is rejected. Changing the traffic multiplier can change scheduling
+feasibility and vehicle assignment, but never the underlying geographic graph.
+
+Raw Route 0/missing/blank labels are retained for audit, excluded from informative
+Route counts and distant-Route conclusions. Vehicles expose informative_routes
+separately; more_than_two_routes uses only those informative labels.
+
 Reports include counts by task type, missing/duplicate/unknown/cross-station
 references, per-vehicle scheduling and changing loads, station/global workload,
 Route/city/postcode distributions, distant subareas, area reentries, overlap,
@@ -71,11 +82,15 @@ These are transparent indicators for human inspection, not a geometric crossing
 detector. Flexible windows may obscure a direct AM/PM transition; inspect the
 whole stop sequence. More than two Routes is flagged without imposing a cap.
 
-Low-utilization vehicles are flagged, but merge/redistribution search and
-automatic assignment are not implemented. No failed-search impossibility claim
-is made. The full acceptance suite for a future assignment algorithm (territory
-invariance, continuous splits, justified appointment splits and merge checks)
-remains pending.
+This runner itself checks a supplied baseline. Use the automatic planner in
+[ASSIGNMENT.md](ASSIGNMENT.md) for actual low-utilization merge/redistribution
+and automatic assignment. Assignment-level synthetic/adversarial tests now
+cover Route invariance, continuous splits, appointment splits/reentries and
+merge decisions. Actual road quality and operational acceptance remain pending.
+
+Original synthetic-baseline.json/.md are historical first-stage evidence.
+Corrected diagnostic output is synthetic-baseline-v2.json/.md; the original
+files have not been overwritten.
 
 Private inputs and detailed reports may contain task IDs and fine location
 information. Keep them in ignored data/private/ and outputs/, never commit them.
