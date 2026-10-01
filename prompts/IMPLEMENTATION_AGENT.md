@@ -12,10 +12,13 @@ Before doing anything, read these repository files in order:
 4. `business/WORK_STATUS.md`
 5. `business/DECISIONS.md`
 6. `docs/ACCEPTANCE.md`
-7. `review/REVIEW_FEEDBACK.md`
-8. `review/REVIEW_REQUEST.md`
+7. `docs/DATA_PRIVACY.md`
+8. `review/REVIEW_FEEDBACK.md`
+9. `review/REVIEW_REQUEST.md`
 
 If `review/REVIEW_FEEDBACK.md` contains unresolved findings, address them as part of the current work unless a newer explicit business decision supersedes them.
+
+This repository is public. You may read authorized real operational data from the local/private working environment, but never commit raw customer/order data, exact customer addresses, phone numbers, credentials, or private address-level caches. Commit only code, safe configuration, synthetic/sanitized fixtures, and non-identifying aggregate evidence.
 
 Then inspect all source code, configuration, tests, raw input data, road matrices/caches, and historical outputs available in your environment.
 
@@ -53,6 +56,8 @@ First produce a trusted baseline and a six-station geographic diagnostic that sh
 
 For Belgium, handle Route 0 as non-informative and build geography from actual cities/postcodes/road relationships.
 
+Do not stop after diagnostics if the evidence needed for implementation is available. Continue into the new vehicle-assignment logic, targeted tests, regression, and human-readable reporting.
+
 ## Implementation expectations
 
 Design the new assignment logic so it remains stable if Route IDs are renumbered while geography stays unchanged.
@@ -87,7 +92,8 @@ Before finishing any meaningful task:
 2. append important assumptions/decisions to `business/DECISIONS.md`;
 3. address applicable unresolved findings in `review/REVIEW_FEEDBACK.md` without deleting review history;
 4. fill `review/REVIEW_REQUEST.md` with the exact commit SHA(s), tests, metrics, known limitations and claims requiring independent review;
-5. commit all relevant changes;
-6. give the user the exact commit SHA and a concise summary.
+5. check staged files for sensitive/customer data;
+6. commit all relevant changes;
+7. give the user the exact commit SHA and a concise summary.
 
 Work autonomously. When evidence is incomplete, make the safest reversible assumption, document it, and keep moving rather than inventing business facts.
