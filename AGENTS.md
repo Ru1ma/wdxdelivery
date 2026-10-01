@@ -11,12 +11,15 @@ Before changing code, read:
 3. `business/WORK_STATUS.md`
 4. `business/DECISIONS.md`
 5. `docs/ACCEPTANCE.md`
-6. `review/REVIEW_FEEDBACK.md`
-7. `review/REVIEW_REQUEST.md`
+6. `docs/DATA_PRIVACY.md`
+7. `review/REVIEW_FEEDBACK.md`
+8. `review/REVIEW_REQUEST.md`
 
 If code, tests, data samples, historical outputs, or configuration are later added, inspect those before proposing a new algorithm.
 
 If `review/REVIEW_FEEDBACK.md` contains unresolved findings, treat them as required work unless they conflict with a newer explicit business decision.
+
+Because this repository is public, never commit raw customer/order data, exact customer addresses, phone numbers, credentials, or address-level private routing caches. Follow `docs/DATA_PRIVACY.md`.
 
 ## 2. Source-of-truth hierarchy
 
@@ -119,7 +122,8 @@ Before ending a task:
    - actual metrics/results,
    - known failures/limitations,
    - claims that still require independent review.
-5. Do not erase historical failures merely because a newer version improves them.
+5. Check staged files for sensitive/customer data before commit.
+6. Do not erase historical failures merely because a newer version improves them.
 
 ## 10. Stop conditions
 
