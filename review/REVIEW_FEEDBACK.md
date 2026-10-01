@@ -6,11 +6,11 @@ Implementation agents must **read this file before starting a new correction cyc
 
 ## Current review status
 
-Baseline/diagnostic milestone independently reviewed.
+Automatic assignment milestone independently reviewed.
 
-Current disposition: **READY_FOR_NEXT_STAGE**
+Current disposition: **NEEDS_CHANGES**
 
-This disposition approves only the baseline/diagnostic scaffolding as a foundation for further development. It does **not** approve routing quality, the 343-task regression, packaging, website publication, or production use.
+The baseline/diagnostic milestone remains accepted. This new disposition applies to the automatic assignment/fleet-reduction stage only. It does **not** authorize real-data acceptance, packaging, website publication, or production use.
 
 ## Review protocol
 
@@ -39,133 +39,196 @@ Reviewed:
 - evidence handoff: `43ebc729c1739deee3ee58aa5aa83b2483a10a68`
 - parent baseline: `2a8130277f60a3384aa7b92412d6271a0dcd2ed3`
 
+Disposition: **READY_FOR_NEXT_STAGE**
+
+The baseline validator/diagnostic scaffolding is accepted as a development foundation only. Historical real-data, operational and release gates remain unresolved.
+
+### 2026-10-01 — Automatic geography-first assignment milestone
+
+Reviewed:
+
+- implementation: `c1c56bf1fb8d7119aa4aed8c5d531d30b7e54c15`
+- evidence handoff: `657e38297a80a831506f3d5e6e8969ed1ec82c94`
+- reviewer baseline: `062f4787aba835e3102df6a55493b302d17b2216`
+
 Evidence inspected:
 
-- `wdxdelivery/baseline.py`
-- `tests/test_baseline.py`
-- `docs/BASELINE_INPUT.md`
+- `wdxdelivery/planner.py`
+- updated `wdxdelivery/baseline.py`
+- `tests/test_planner.py`
+- updated `tests/test_baseline.py`
+- `docs/ASSIGNMENT.md`
 - `.github/workflows/tests.yml`
 - `business/WORK_STATUS.md`
 - `business/DECISIONS.md`
 - `review/REVIEW_REQUEST.md`
-- synthetic evidence and commit diff
+- paired synthetic evidence and implementation diff
+
+No GitHub Actions run/status was present for the reviewed implementation SHA. The independent review therefore verifies the submitted code/test design and evidence claims, not a remotely reproduced CI pass.
 
 #### What is accepted in this milestone
 
-The implementation correctly scopes itself as a **validator/diagnostic for a supplied plan**, not an optimizer. It does not falsely claim the synthetic fixture is real operational evidence.
+The implementation materially addresses the previous review:
 
-The reviewed code has useful fail-closed behavior for missing road arcs, explicit task-type accounting, cross-station detection, appointment/service completion checking, return-to-depot workday accounting, Pickup load growth, separate normal-delivery cap scope, route-renumbering diagnostic invariance, area reentry/overlap indicators, and preservation of synthetic/approximate road provenance.
+- Route `0`, blank and missing labels are separated from informative Route metrics.
+- Geographic thresholds are explicitly base-road minutes while scheduling/driving uses traffic-buffered minutes.
+- Automatic station-fixed assignment now exists and ignores predeclared vehicle/subarea assignments.
+- Working subareas are derived from city/postcode plus road relationships.
+- Vehicle territories require connected area graphs and bounded whole-territory road diameter.
+- Stop ordering checks appointments, service completion, dynamic Pickup load, capacity, workday and depot return.
+- Contiguous-area ordering is tried before allowing reentry, and budget-limited search is not presented as an infeasibility proof.
+- Low-utilization vehicles trigger real merge/redistribution attempts with blocker evidence.
+- Workload balancing moves whole adjacent subareas only when spread improves and detour limits remain satisfied.
+- The generated plan is revalidated by the independent baseline validator.
+- Synthetic comparison reports tradeoffs honestly: km/driving/work improve while waiting and workday spread worsen.
 
-The 21 reported tests cover the intended baseline scope reasonably well. However, no GitHub Actions run/status was present for the reviewed implementation SHA, so the independent review confirms the code/test definitions and reported local result, **not a remotely reproduced CI pass**.
+These are meaningful improvements over the prior diagnostic-only stage.
 
-#### Required corrections before business-grade routing reports
+#### Blocking issue 1 — fleet reduction is incorrectly gated by the low-utilization threshold
 
-1. **Route 0 / missing Route semantics**
+`reduce_fleet()` only considers donors where:
 
-   Raw Route distribution may continue to display `0` and missing labels, but `0` and missing Route must not be treated as meaningful geography for Route-count preference or Route-specific "distant route" conclusions.
+`self.schedule(g).report["low_utilization"] == True`
 
-   Current code counts Route `0` in `more_than_two_routes` and can include `0` / `(missing)` in `distant_routes`. This can produce misleading business diagnostics, especially for BELGEM where Route 0 is explicitly non-informative.
+This means the planner can retain an unnecessary vehicle even when two adjacent vehicles can be merged with:
 
-   Preserve the raw labels for audit, but separate **informative Route labels** from non-informative labels in operational quality metrics.
+- valid geography,
+- valid appointments,
+- valid capacity,
+- valid workday,
+- acceptable driving detour,
 
-2. **Traffic-buffer semantics must be explicit and consistent**
+simply because neither current vehicle falls below the configured low-utilization threshold.
 
-   Scheduling/driving minutes apply `traffic_multiplier`, while adjacency, separation and cross-region-jump thresholds currently use raw matrix minutes.
+That conflicts with the project objective to use fewer vehicles when a practical feasible merge exists. The low-utilization threshold may prioritize which vehicle to inspect first, but it must **not be the gate that decides whether fleet reduction is attempted at all**.
 
-   Before real-data routing, explicitly define whether adjacency thresholds operate on base road minutes or traffic-buffered minutes. Do not allow the same numeric threshold to mean two different travel-time concepts implicitly. Add tests for the chosen policy.
+Concrete counterexample to add as a test:
 
-3. **Do not wait for real data before implementing the assignment engine**
+- max workday = 600 min
+- low-utilization threshold = 300 min
+- two adjacent single-task vehicles
+- individual workdays are approximately 300 and 320 min, therefore neither is "low utilization" under the current strict `< 300` rule
+- a combined adjacent route is still feasible at or below 600 min
 
-   Missing real orders/matrices blocks calibration and final validation, but it does **not** block generic algorithm development.
+The current algorithm will not attempt the merge.
 
-   The next stage should immediately implement automatic geography-first assignment on synthetic/adversarial fixtures:
-   - derive working subareas/territories from city/postcode + road relationships instead of requiring the final assignment to be predeclared,
-   - create geographically continuous vehicle territories,
-   - preserve AM/PM continuity,
-   - order stops under appointments,
-   - test low-utilization merge/redistribution,
-   - explain unavoidable splits/reentries,
-   - keep 1–2 Routes as a soft preference only.
+Required correction:
 
-4. **Do not use current candidate adjacency as sufficient proof of territory quality**
+- run a general adjacent feasible-merge pass for all same-station groups, not only low-utilization donors;
+- low-utilization may be used as a search priority / tie-breaker;
+- fleet count reduction should be lexicographically preferred before workload fine-tuning, subject to geography and all hard constraints;
+- retain the current explicit blocker evidence when a merge is rejected.
 
-   `geography()` defines two subareas as candidate neighbors if at least one cross-pair is sufficiently close in both directions. That is acceptable for diagnostics, but a future assignment engine must not equate one close boundary pair with overall compactness.
+#### Blocking issue 2 — derived subareas can materially depend on opaque location ID ordering
 
-   Use additional evidence when forming territories (dispersion, internal road spread, inter-area travel distribution/graph structure, full-day route effect, etc.).
+`derive_subareas()` iterates:
 
-5. **Low utilization must become a merge decision, not merely a fixed threshold flag**
+`for loc_id in sorted(ids)`
 
-   The current global `low_utilization_minutes` flag is acceptable as a diagnostic. In the assignment engine, low utilization must trigger an actual adjacent-merge / redistribution search and report the blocking constraint when no feasible merge is found.
+and performs greedy complete-link packing into the first/best existing cluster.
 
-#### Tests required in the next stage
+The same geography can therefore produce different subarea membership when location IDs are renamed, even though road distances, city/postcode, tasks and appointments are unchanged.
 
-Add assignment-level tests, not just diagnostic invariance:
+Example shape:
 
-- Route IDs are arbitrarily renumbered and vehicle territories remain materially the same.
-- A large Route splits into continuous postcode/road subareas without interleaving vehicles.
-- Two distant Routes are rejected even when that would satisfy a "two Routes" preference.
-- Route 0 / missing Route cannot drive grouping decisions.
-- A low-utilization vehicle is merged when geography + appointments + capacity allow it.
-- A low-utilization vehicle remains separate when a concrete constraint blocks the merge, and that reason is emitted.
-- Strict appointments can justify an otherwise undesirable territory split/reentry.
-- AM/PM continuity is evaluated across the full vehicle day.
-- Pickup/Redeliver remain outside normal-delivery quota while still affecting time/load.
-- >2 informative Routes are allowed when geographically justified and explicitly explained.
+- three locations in one city/postcode seed,
+- A↔B and B↔C are within the subarea threshold,
+- A↔C exceeds it.
 
-#### Real-data gate
+Depending on which opaque ID sorts first, the greedy split can become {A,B}+{C} or {A}+{B,C}. With asymmetric task windows/loads that can materially change vehicle territories.
 
-The following remain unverified and must not be claimed until real/private evidence is supplied and run:
+Route-number invariance is already tested; the same principle should apply to non-geographic opaque location IDs.
+
+Required correction:
+
+- make subarea derivation depend on road/geographic structure, not lexical location IDs;
+- add an assignment-level test that arbitrarily renames location IDs and rewrites all references/arcs while preserving geography, then verifies materially equivalent territories/results.
+
+A deterministic tie-break is still allowed for genuinely symmetric geography, but arbitrary database/order identifiers must not decide a materially different geographic partition.
+
+#### Business acceptance gap 3 — normal-delivery AM targets are currently only reported
+
+The business baseline specifies soft operational targets around:
+
+- ordinary areas: about 5–6 normal morning deliveries,
+- DEN HAAG dense areas: up to about 7,
+- long-distance areas: often fewer according to travel/service time.
+
+The current planner reports phase counts but does not use them as a soft assignment/order objective.
+
+This is not a hard-constraint bug, but before real 343-task acceptance the planner needs a configurable soft mechanism so vehicle reduction does not create operationally undesirable morning concentration.
+
+Required next-stage behavior:
+
+- keep these targets soft, never override hard feasibility/geography;
+- make them configurable by station/area rather than hard-coded magic values;
+- report deviations and why a target was intentionally exceeded/underrun;
+- test that geography/appointments can legitimately override the target.
+
+#### Business acceptance gap 4 — AM/PM phase continuity is measured but not explicitly preferred
+
+Actual appointment windows correctly remain the hard truth. However, where multiple schedules are equally feasible, the current scheduler objective prioritizes:
+
+1. area reentries,
+2. driving,
+3. work,
+4. waiting,
+
+without a soft penalty for unnecessary PM-before-AM phase inversion or a large AM→PM handoff when another similarly efficient sequence avoids it.
+
+Because the requirements explicitly ask to consider morning and afternoon separately while maintaining a coherent full day, add a soft phase-continuity preference where it does not conflict with appointments.
+
+Do **not** turn phase labels into a hard universal rule; use them as an operational preference only.
+
+#### Non-blocking observation — current 90-task scale check is useful but weak
+
+The 90-task check is made by copying the same invented task pattern three times. It is useful as a smoke test for integrity, but it is not a meaningful stress test of geographic diversity or search behavior.
+
+Before the 343-task regression, add at least one larger adversarial synthetic case with:
+
+- multiple cities/postcode seeds,
+- uneven station volumes,
+- mixed Pickup/Redeliver,
+- tight and flexible windows,
+- one or more large Routes spanning subareas,
+- Route 0/missing labels,
+- several plausible merge choices,
+- workload imbalance.
+
+Track search nodes, bounded-query count, runtime class/order-of-growth evidence, vehicle count and integrity.
+
+#### Required regression tests for the correction cycle
+
+At minimum add:
+
+1. two non-low-utilization adjacent vehicles merge when all hard/geographic constraints allow it;
+2. fleet reduction still rejects that merge when appointment/capacity/workday/geography blocks it, with the blocker recorded;
+3. arbitrary location-ID renaming does not materially change derived territories;
+4. soft AM delivery targets influence tie-breaking but never violate geography/appointments;
+5. avoid unnecessary PM-before-AM ordering when an otherwise equivalent coherent order exists;
+6. the independent baseline validator still passes every generated feasible plan;
+7. bounded-search uncertainty remains explicitly labeled and never becomes a false impossibility claim.
+
+#### Real-data gates still unresolved
+
+Do not claim any of the following yet:
 
 - 343-task historical regression,
-- real six-station Route/city/postcode distribution,
-- actual road travel quality,
-- historical production configuration (900 kg / 12 h / 30 min / +25% / 25-order semantics),
+- real six-station Route/city/postcode behavior,
+- actual road-quality validation,
+- verified production parameter semantics,
 - real vehicle-count/km improvement,
-- operational geographic acceptance.
+- operational route acceptance,
+- production readiness.
 
 #### Disposition
 
-**READY_FOR_NEXT_STAGE**
+**NEEDS_CHANGES**
 
-Proceed directly to the automatic geography-first assignment/merge engine using synthetic and adversarial tests. Do not package or release. When real private input becomes available, run the existing validator plus the new assignment engine against it and submit a new `REVIEW_REQUEST.md` with exact metrics and commit SHA.
+The assignment engine is now structurally promising, but the fleet-reduction gate is a core business-logic defect and location-ID-dependent subarea partitioning is an avoidable source of unstable geography.
+
+Fix those before the next independent review. Continue using synthetic/adversarial tests while real private data remains unavailable. Do not package or release.
 
 ## Implementation handoff note — 2026-10-01
 
-No unresolved reviewer findings were present at intake. Baseline tooling and
-synthetic evidence were submitted for independent review; see REVIEW_REQUEST.md.
-This note is an implementation status update, not an independent disposition.
-
-## Implementation response — automatic assignment stage, 2026-10-01
-
-The above reviewer history and READY_FOR_NEXT_STAGE disposition are preserved.
-This response describes implementation work awaiting new independent review.
-
-1. Route semantics: baseline raw distributions retain 0/missing/blank, while
-   informative_routes and distant-Route findings exclude them. The automatic
-   engine never uses Route labels for grouping/ties. Diagnostic and assignment
-   tests cover zero/missing/renumbering and raw audit preservation.
-2. Traffic semantics: explicitly choose base_road_minutes for all geographic
-   thresholds/diagnostics/graph/diameter and traffic-buffered scheduling/costs.
-   Reports expose the policy; a contradictory config policy is rejected. Tests
-   vary the multiplier and verify the geographic graph/thresholds remain fixed.
-3. Automatic engine: wdxdelivery/planner.py derives city/postcode road subareas
-   and connected compact vehicle territories, schedules the full day, balances
-   adjacent subareas and reduces fleet through actual merge/redistribution.
-   It ignores predeclared vehicle/subarea assignments. Acceptance-level tests now
-   cover territory invariance, large-Route splits, distant Route rejection,
-   strict appointment splits/reentries, AM/PM, task types and >2 informative Routes.
-4. Territory compactness: all-cross-pair graph links, complete-link seed splitting,
-   whole-vehicle road diameter and full-day driving-detour checks supplement
-   candidate adjacency. Counterexamples cover misleading close boundaries,
-   connected-but-dispersed chains and dispersed city/postcode seeds.
-5. Low utilization: attempts adjacent merges and whole-location redistribution
-   across recipients, emitting concrete geographic/capacity/appointment/workday/
-   count/detour blockers or budget-limited search status. Tests verify successful
-   merge, blocked merge, redistribution reduction and neighboring workload balance.
-
-49 tests pass locally; small exhaustive/randomized scheduling oracles and a
-90-task invented scale check pass. New reproducible paired evidence retains six
-appointment-required reentries and six geography-blocked low-use vehicles.
-Exact implementation SHA, commands, metrics/tradeoffs and limitations are in the
-new REVIEW_REQUEST.md. No remote CI, real 343-task regression, operational or
-release acceptance claim; those original real-data gates remain unresolved.
+The implementation response for the automatic-assignment stage remains part of repository history. Its claims are superseded only where this independent review identifies gaps above.
