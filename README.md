@@ -39,4 +39,12 @@ Normal loop:
 
 Real customer/order data should stay outside this public repository unless irreversibly sanitized.
 
+## Reproducible baseline diagnostics
+
+The initial runner validates a supplied ordered plan and reports six-station
+geography and workload evidence. It does not assign vehicles automatically.
+See [input contract and commands](docs/BASELINE_INPUT.md). The committed
+examples/evidence use wholly invented data; real operational validation and the
+343-task historical regression are pending.
+
 Do not claim the project is optimized merely because tests pass. Hard-constraint correctness and operational route quality are separate acceptance layers.
