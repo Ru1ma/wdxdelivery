@@ -1,0 +1,58 @@
+[
+  {
+    "adjacent_merges": 8,
+    "bounded_queries": 8,
+    "integrity": {
+      "cross_station": 0,
+      "duplicates": {},
+      "missing": [],
+      "unknown": []
+    },
+    "search_nodes": 4510,
+    "summary": {
+      "Delivery": 64,
+      "Pickup": 22,
+      "Redeliver": 18,
+      "driving_minutes": 2620.7999999999997,
+      "km": 1092.0,
+      "longest_minutes": 429.6,
+      "metrics_available": true,
+      "service_minutes": 915,
+      "shortest_minutes": 42.2,
+      "spread_minutes": 387.40000000000003,
+      "total_tasks": 104,
+      "vehicles": 23,
+      "waiting_minutes": 2008.0,
+      "work_minutes": 5658.8
+    },
+    "tasks": 104
+  },
+  {
+    "adjacent_merges": 1,
+    "bounded_queries": 23,
+    "integrity": {
+      "cross_station": 0,
+      "duplicates": {},
+      "missing": [],
+      "unknown": []
+    },
+    "search_nodes": 9990,
+    "summary": {
+      "Delivery": 127,
+      "Pickup": 41,
+      "Redeliver": 40,
+      "driving_minutes": 5176.8,
+      "km": 2157.0,
+      "longest_minutes": 393.6,
+      "metrics_available": true,
+      "service_minutes": 1837,
+      "shortest_minutes": 69.2,
+      "spread_minutes": 324.40000000000003,
+      "total_tasks": 208,
+      "vehicles": 44,
+      "waiting_minutes": 4911.8,
+      "work_minutes": 12145.6
+    },
+    "tasks": 208
+  }
+]

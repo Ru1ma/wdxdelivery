@@ -1,0 +1,1070 @@
+{
+  "config": {
+    "adjacency_minutes": 15,
+    "capacity_kg": 400,
+    "evidence": "Invented test parameters; no verified operational configuration.",
+    "loading_minutes": 15,
+    "low_utilization_minutes": 300,
+    "max_work_minutes": 600,
+    "task_cap": null,
+    "traffic_multiplier": 1.2
+  },
+  "depots": {
+    "AMS": "s0d",
+    "BELGEM": "s5d",
+    "DEN HAAG": "s2d",
+    "ROT": "s1d",
+    "TILBURG": "s4d",
+    "UTRECHT": "s3d"
+  },
+  "locations": [
+    {
+      "city": "Invented depot",
+      "id": "s0d",
+      "postcode_area": "TEST-depot",
+      "station": "AMS"
+    },
+    {
+      "city": "Invented alpha",
+      "id": "s0a",
+      "postcode_area": "TEST-alpha",
+      "station": "AMS"
+    },
+    {
+      "city": "Invented beta",
+      "id": "s0b",
+      "postcode_area": "TEST-beta",
+      "station": "AMS"
+    },
+    {
+      "city": "Invented gamma",
+      "id": "s0c",
+      "postcode_area": "TEST-gamma",
+      "station": "AMS"
+    },
+    {
+      "city": "Invented depot",
+      "id": "s1d",
+      "postcode_area": "TEST-depot",
+      "station": "ROT"
+    },
+    {
+      "city": "Invented alpha",
+      "id": "s1a",
+      "postcode_area": "TEST-alpha",
+      "station": "ROT"
+    },
+    {
+      "city": "Invented beta",
+      "id": "s1b",
+      "postcode_area": "TEST-beta",
+      "station": "ROT"
+    },
+    {
+      "city": "Invented gamma",
+      "id": "s1c",
+      "postcode_area": "TEST-gamma",
+      "station": "ROT"
+    },
+    {
+      "city": "Invented depot",
+      "id": "s2d",
+      "postcode_area": "TEST-depot",
+      "station": "DEN HAAG"
+    },
+    {
+      "city": "Invented alpha",
+      "id": "s2a",
+      "postcode_area": "TEST-alpha",
+      "station": "DEN HAAG"
+    },
+    {
+      "city": "Invented beta",
+      "id": "s2b",
+      "postcode_area": "TEST-beta",
+      "station": "DEN HAAG"
+    },
+    {
+      "city": "Invented gamma",
+      "id": "s2c",
+      "postcode_area": "TEST-gamma",
+      "station": "DEN HAAG"
+    },
+    {
+      "city": "Invented depot",
+      "id": "s3d",
+      "postcode_area": "TEST-depot",
+      "station": "UTRECHT"
+    },
+    {
+      "city": "Invented alpha",
+      "id": "s3a",
+      "postcode_area": "TEST-alpha",
+      "station": "UTRECHT"
+    },
+    {
+      "city": "Invented beta",
+      "id": "s3b",
+      "postcode_area": "TEST-beta",
+      "station": "UTRECHT"
+    },
+    {
+      "city": "Invented gamma",
+      "id": "s3c",
+      "postcode_area": "TEST-gamma",
+      "station": "UTRECHT"
+    },
+    {
+      "city": "Invented depot",
+      "id": "s4d",
+      "postcode_area": "TEST-depot",
+      "station": "TILBURG"
+    },
+    {
+      "city": "Invented alpha",
+      "id": "s4a",
+      "postcode_area": "TEST-alpha",
+      "station": "TILBURG"
+    },
+    {
+      "city": "Invented beta",
+      "id": "s4b",
+      "postcode_area": "TEST-beta",
+      "station": "TILBURG"
+    },
+    {
+      "city": "Invented gamma",
+      "id": "s4c",
+      "postcode_area": "TEST-gamma",
+      "station": "TILBURG"
+    },
+    {
+      "city": "Invented depot",
+      "id": "s5d",
+      "postcode_area": "TEST-depot",
+      "station": "BELGEM"
+    },
+    {
+      "city": "Invented alpha",
+      "id": "s5a",
+      "postcode_area": "TEST-alpha",
+      "station": "BELGEM"
+    },
+    {
+      "city": "Invented beta",
+      "id": "s5b",
+      "postcode_area": "TEST-beta",
+      "station": "BELGEM"
+    },
+    {
+      "city": "Invented gamma",
+      "id": "s5c",
+      "postcode_area": "TEST-gamma",
+      "station": "BELGEM"
+    }
+  ],
+  "planning": {
+    "am_delivery_targets": {
+      "stations": {
+        "AMS": {
+          "max": 6,
+          "min": 5
+        },
+        "BELGEM": {
+          "max": 6,
+          "min": 5
+        },
+        "DEN HAAG": {
+          "max": 6,
+          "min": 5
+        },
+        "ROT": {
+          "max": 6,
+          "min": 5
+        },
+        "TILBURG": {
+          "max": 6,
+          "min": 5
+        },
+        "UTRECHT": {
+          "max": 6,
+          "min": 5
+        }
+      }
+    },
+    "balance_passes": 5,
+    "max_extra_driving_minutes": 0,
+    "phase_driving_slack_minutes": 3,
+    "redistribution_node_budget": 2000,
+    "search_node_budget": 20000,
+    "start_minute": 0,
+    "subarea_max_minutes": 15,
+    "territory_max_minutes": 45
+  },
+  "road": {
+    "arcs": [
+      {
+        "from": "s0d",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s0a"
+      },
+      {
+        "from": "s0d",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s0b"
+      },
+      {
+        "from": "s0d",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s0c"
+      },
+      {
+        "from": "s0a",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s0d"
+      },
+      {
+        "from": "s0a",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s0b"
+      },
+      {
+        "from": "s0a",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s0c"
+      },
+      {
+        "from": "s0b",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s0d"
+      },
+      {
+        "from": "s0b",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s0a"
+      },
+      {
+        "from": "s0b",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s0c"
+      },
+      {
+        "from": "s0c",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s0d"
+      },
+      {
+        "from": "s0c",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s0a"
+      },
+      {
+        "from": "s0c",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s0b"
+      },
+      {
+        "from": "s1d",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s1a"
+      },
+      {
+        "from": "s1d",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s1b"
+      },
+      {
+        "from": "s1d",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s1c"
+      },
+      {
+        "from": "s1a",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s1d"
+      },
+      {
+        "from": "s1a",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s1b"
+      },
+      {
+        "from": "s1a",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s1c"
+      },
+      {
+        "from": "s1b",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s1d"
+      },
+      {
+        "from": "s1b",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s1a"
+      },
+      {
+        "from": "s1b",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s1c"
+      },
+      {
+        "from": "s1c",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s1d"
+      },
+      {
+        "from": "s1c",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s1a"
+      },
+      {
+        "from": "s1c",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s1b"
+      },
+      {
+        "from": "s2d",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s2a"
+      },
+      {
+        "from": "s2d",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s2b"
+      },
+      {
+        "from": "s2d",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s2c"
+      },
+      {
+        "from": "s2a",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s2d"
+      },
+      {
+        "from": "s2a",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s2b"
+      },
+      {
+        "from": "s2a",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s2c"
+      },
+      {
+        "from": "s2b",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s2d"
+      },
+      {
+        "from": "s2b",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s2a"
+      },
+      {
+        "from": "s2b",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s2c"
+      },
+      {
+        "from": "s2c",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s2d"
+      },
+      {
+        "from": "s2c",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s2a"
+      },
+      {
+        "from": "s2c",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s2b"
+      },
+      {
+        "from": "s3d",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s3a"
+      },
+      {
+        "from": "s3d",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s3b"
+      },
+      {
+        "from": "s3d",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s3c"
+      },
+      {
+        "from": "s3a",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s3d"
+      },
+      {
+        "from": "s3a",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s3b"
+      },
+      {
+        "from": "s3a",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s3c"
+      },
+      {
+        "from": "s3b",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s3d"
+      },
+      {
+        "from": "s3b",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s3a"
+      },
+      {
+        "from": "s3b",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s3c"
+      },
+      {
+        "from": "s3c",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s3d"
+      },
+      {
+        "from": "s3c",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s3a"
+      },
+      {
+        "from": "s3c",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s3b"
+      },
+      {
+        "from": "s4d",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s4a"
+      },
+      {
+        "from": "s4d",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s4b"
+      },
+      {
+        "from": "s4d",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s4c"
+      },
+      {
+        "from": "s4a",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s4d"
+      },
+      {
+        "from": "s4a",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s4b"
+      },
+      {
+        "from": "s4a",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s4c"
+      },
+      {
+        "from": "s4b",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s4d"
+      },
+      {
+        "from": "s4b",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s4a"
+      },
+      {
+        "from": "s4b",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s4c"
+      },
+      {
+        "from": "s4c",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s4d"
+      },
+      {
+        "from": "s4c",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s4a"
+      },
+      {
+        "from": "s4c",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s4b"
+      },
+      {
+        "from": "s5d",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s5a"
+      },
+      {
+        "from": "s5d",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s5b"
+      },
+      {
+        "from": "s5d",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s5c"
+      },
+      {
+        "from": "s5a",
+        "km": 12.0,
+        "minutes": 15,
+        "to": "s5d"
+      },
+      {
+        "from": "s5a",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s5b"
+      },
+      {
+        "from": "s5a",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s5c"
+      },
+      {
+        "from": "s5b",
+        "km": 16.0,
+        "minutes": 20,
+        "to": "s5d"
+      },
+      {
+        "from": "s5b",
+        "km": 8.0,
+        "minutes": 10,
+        "to": "s5a"
+      },
+      {
+        "from": "s5b",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s5c"
+      },
+      {
+        "from": "s5c",
+        "km": 72.0,
+        "minutes": 90,
+        "to": "s5d"
+      },
+      {
+        "from": "s5c",
+        "km": 64.0,
+        "minutes": 80,
+        "to": "s5a"
+      },
+      {
+        "from": "s5c",
+        "km": 56.0,
+        "minutes": 70,
+        "to": "s5b"
+      }
+    ],
+    "basis": "synthetic",
+    "source": "Invented symmetric travel table, not real road travel."
+  },
+  "tasks": [
+    {
+      "id": "s0t1",
+      "kind": "Delivery",
+      "location": "s0a",
+      "phase": "AM",
+      "route": "1",
+      "service_minutes": 10,
+      "station": "AMS",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s0t2",
+      "kind": "Delivery",
+      "location": "s0b",
+      "phase": "AM",
+      "route": "5",
+      "service_minutes": 10,
+      "station": "AMS",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s0t3",
+      "kind": "Pickup",
+      "location": "s0a",
+      "phase": "PM",
+      "pickup_location": "s0a",
+      "route": null,
+      "service_minutes": 10,
+      "station": "AMS",
+      "weight_kg": 50,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s0t4",
+      "kind": "Redeliver",
+      "location": "s0b",
+      "phase": "PM",
+      "route": "0",
+      "service_minutes": 10,
+      "station": "AMS",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s0t5",
+      "kind": "Delivery",
+      "location": "s0c",
+      "phase": "PM",
+      "route": "2",
+      "service_minutes": 10,
+      "station": "AMS",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s1t1",
+      "kind": "Delivery",
+      "location": "s1a",
+      "phase": "AM",
+      "route": "1",
+      "service_minutes": 10,
+      "station": "ROT",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s1t2",
+      "kind": "Delivery",
+      "location": "s1b",
+      "phase": "AM",
+      "route": "5",
+      "service_minutes": 10,
+      "station": "ROT",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s1t3",
+      "kind": "Pickup",
+      "location": "s1a",
+      "phase": "PM",
+      "pickup_location": "s1a",
+      "route": null,
+      "service_minutes": 10,
+      "station": "ROT",
+      "weight_kg": 50,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s1t4",
+      "kind": "Redeliver",
+      "location": "s1b",
+      "phase": "PM",
+      "route": "0",
+      "service_minutes": 10,
+      "station": "ROT",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s1t5",
+      "kind": "Delivery",
+      "location": "s1c",
+      "phase": "PM",
+      "route": "2",
+      "service_minutes": 10,
+      "station": "ROT",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s2t1",
+      "kind": "Delivery",
+      "location": "s2a",
+      "phase": "AM",
+      "route": "1",
+      "service_minutes": 10,
+      "station": "DEN HAAG",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s2t2",
+      "kind": "Delivery",
+      "location": "s2b",
+      "phase": "AM",
+      "route": "5",
+      "service_minutes": 10,
+      "station": "DEN HAAG",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s2t3",
+      "kind": "Pickup",
+      "location": "s2a",
+      "phase": "PM",
+      "pickup_location": "s2a",
+      "route": null,
+      "service_minutes": 10,
+      "station": "DEN HAAG",
+      "weight_kg": 50,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s2t4",
+      "kind": "Redeliver",
+      "location": "s2b",
+      "phase": "PM",
+      "route": "0",
+      "service_minutes": 10,
+      "station": "DEN HAAG",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s2t5",
+      "kind": "Delivery",
+      "location": "s2c",
+      "phase": "PM",
+      "route": "2",
+      "service_minutes": 10,
+      "station": "DEN HAAG",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s3t1",
+      "kind": "Delivery",
+      "location": "s3a",
+      "phase": "AM",
+      "route": "1",
+      "service_minutes": 10,
+      "station": "UTRECHT",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s3t2",
+      "kind": "Delivery",
+      "location": "s3b",
+      "phase": "AM",
+      "route": "5",
+      "service_minutes": 10,
+      "station": "UTRECHT",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s3t3",
+      "kind": "Pickup",
+      "location": "s3a",
+      "phase": "PM",
+      "pickup_location": "s3a",
+      "route": null,
+      "service_minutes": 10,
+      "station": "UTRECHT",
+      "weight_kg": 50,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s3t4",
+      "kind": "Redeliver",
+      "location": "s3b",
+      "phase": "PM",
+      "route": "0",
+      "service_minutes": 10,
+      "station": "UTRECHT",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s3t5",
+      "kind": "Delivery",
+      "location": "s3c",
+      "phase": "PM",
+      "route": "2",
+      "service_minutes": 10,
+      "station": "UTRECHT",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s4t1",
+      "kind": "Delivery",
+      "location": "s4a",
+      "phase": "AM",
+      "route": "1",
+      "service_minutes": 10,
+      "station": "TILBURG",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s4t2",
+      "kind": "Delivery",
+      "location": "s4b",
+      "phase": "AM",
+      "route": "5",
+      "service_minutes": 10,
+      "station": "TILBURG",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s4t3",
+      "kind": "Pickup",
+      "location": "s4a",
+      "phase": "PM",
+      "pickup_location": "s4a",
+      "route": null,
+      "service_minutes": 10,
+      "station": "TILBURG",
+      "weight_kg": 50,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s4t4",
+      "kind": "Redeliver",
+      "location": "s4b",
+      "phase": "PM",
+      "route": "0",
+      "service_minutes": 10,
+      "station": "TILBURG",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s4t5",
+      "kind": "Delivery",
+      "location": "s4c",
+      "phase": "PM",
+      "route": "2",
+      "service_minutes": 10,
+      "station": "TILBURG",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s5t1",
+      "kind": "Delivery",
+      "location": "s5a",
+      "phase": "AM",
+      "route": "1",
+      "service_minutes": 10,
+      "station": "BELGEM",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s5t2",
+      "kind": "Delivery",
+      "location": "s5b",
+      "phase": "AM",
+      "route": "5",
+      "service_minutes": 10,
+      "station": "BELGEM",
+      "weight_kg": 100,
+      "window": [
+        0,
+        180
+      ]
+    },
+    {
+      "id": "s5t3",
+      "kind": "Pickup",
+      "location": "s5a",
+      "phase": "PM",
+      "pickup_location": "s5a",
+      "route": null,
+      "service_minutes": 10,
+      "station": "BELGEM",
+      "weight_kg": 50,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s5t4",
+      "kind": "Redeliver",
+      "location": "s5b",
+      "phase": "PM",
+      "route": "0",
+      "service_minutes": 10,
+      "station": "BELGEM",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    },
+    {
+      "id": "s5t5",
+      "kind": "Delivery",
+      "location": "s5c",
+      "phase": "PM",
+      "route": "2",
+      "service_minutes": 10,
+      "station": "BELGEM",
+      "weight_kg": 100,
+      "window": [
+        240,
+        600
+      ]
+    }
+  ]
+}

@@ -51,7 +51,7 @@ examples/evidence use wholly invented data; real operational validation and the
 
 Run automatic assignment (Python standard library only):
 
-    python3 -m wdxdelivery.planner examples/assignment-input.json --plan outputs/plan.json --json outputs/report.json --markdown outputs/report.md
+    python3 -m wdxdelivery.planner examples/correction-input.json --plan outputs/plan.json --json outputs/report.json --markdown outputs/report.md
 
 See [assignment search and limitations](docs/ASSIGNMENT.md). Historical baseline
 evidence remains intact; revised diagnostics and paired comparisons have new names.

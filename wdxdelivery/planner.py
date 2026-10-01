@@ -40,15 +40,89 @@ class AssignmentEngine:
             if isinstance(value, bool) or not isinstance(value, int) or value < 1:
                 raise ValueError(f"{field} must be a positive integer")
         self.cache = {}
+        self.targets = self.settings.get("am_delivery_targets", {})
+        for station, target in self.targets.get("stations", {}).items():
+            if station not in self.data["depots"]:
+                raise ValueError("AM target station requires a configured depot")
+            self.validate_target(target)
+        for target in self.targets.get("areas", []):
+            self.validate_target(target)
+            if target["station"] not in self.data["depots"]:
+                raise ValueError("AM area target requires a configured depot")
+            for field in ("city", "postcode_area"):
+                if not isinstance(target[field], str) or not target[field].strip():
+                    raise ValueError("AM area target needs city/postcode_area")
+        self.phase_slack = self.settings.get("phase_driving_slack_minutes", 0)
+        number(self.phase_slack, "phase_driving_slack_minutes")
         self.events = []
         self.unassigned = []
         self.split_reasons = {}
         self.search_nodes = 0
+        self.location_keys = self.geographic_keys()
         self.areas = self.derive_subareas()
         self.edges = self.area_edges()
 
     def minutes(self, a, b):
         return max(self.arcs[a, b]["minutes"], self.arcs[b, a]["minutes"])
+
+    @staticmethod
+    def validate_target(target):
+        for field in ("min", "max"):
+            if isinstance(target[field], bool) or not isinstance(target[field], int) or target[field] < 0:
+                raise ValueError("AM target min/max must be nonnegative integers")
+        if target["min"] > target["max"]:
+            raise ValueError("AM target min must not exceed max")
+
+    def geographic_keys(self):
+        """ID-free road fingerprints, with task attributes resolving geographic symmetries."""
+        profiles = {}
+        for lid in {t["location"] for t in self.tasks.values()}:
+            loc = self.locations[lid]
+            depot = self.data["depots"][loc["station"]]
+            neighbors = sorted(
+                (other["city"], other["postcode_area"], self.arcs[lid, oid]["minutes"],
+                 self.arcs[oid, lid]["minutes"], self.arcs[depot, oid]["minutes"],
+                 self.arcs[oid, depot]["minutes"])
+                for oid, other in self.locations.items() if other["station"] == loc["station"])
+            task_shape = sorted((t["kind"], t["phase"], t["weight_kg"], t["service_minutes"],
+                                 tuple(t["window"])) for t in self.tasks.values() if t["location"] == lid)
+            profiles[lid] = (self.arcs[depot, lid]["minutes"], self.arcs[lid, depot]["minutes"],
+                             tuple(neighbors), tuple(task_shape))
+        return profiles
+
+    def location_order_key(self, lid):
+        # Task identity is only a final ordering tie; opaque location identity is never used.
+        return self.location_keys[lid], tuple(sorted(t["id"] for t in self.tasks.values() if t["location"] == lid))
+
+    def am_target(self, ids):
+        station = self.tasks[ids[0]]["station"]
+        places = {(self.locations[self.tasks[t]["location"]]["city"],
+                   self.locations[self.tasks[t]["location"]]["postcode_area"]) for t in ids}
+        overrides = [t for t in self.targets.get("areas", [])
+                     if t["station"] == station and (t["city"], t["postcode_area"]) in places]
+        target = min(overrides, key=lambda t: (t["max"], t["min"], t["city"], t["postcode_area"])) if overrides else self.targets.get("stations", {}).get(station)
+        count = sum(self.tasks[t]["kind"] == "Delivery" and self.tasks[t]["phase"] == "AM" for t in ids)
+        penalty = 0 if target is None else max(target["min"] - count, 0, count - target["max"])
+        return {"normal_deliveries": count, "configured": target is not None,
+                "range": None if target is None else [target["min"], target["max"]],
+                "deviation": 0 if target is None else count - min(max(count, target["min"]), target["max"]),
+                "penalty": penalty, "source": "area override" if overrides else "station"}
+
+    def phase_cost(self, ids):
+        pm_seen = inversions = handoff = 0
+        previous = None
+        for tid in ids:
+            task = self.tasks[tid]
+            if task["phase"] == "PM":
+                pm_seen += 1
+            elif task["phase"] == "AM":
+                inversions += pm_seen
+            else:
+                continue
+            if previous and previous["phase"] == "AM" and task["phase"] == "PM":
+                handoff += self.minutes(previous["location"], task["location"])
+            previous = task
+        return inversions, handoff
 
     def derive_subareas(self):
         """City/postcode seeds, then complete-link road splitting; never Route labels."""
@@ -58,15 +132,43 @@ class AssignmentEngine:
             seeds[loc["station"], loc["city"], loc["postcode_area"]].add(loc["id"])
         areas = {}
         for (station, city, postcode), ids in sorted(seeds.items()):
-            clusters = []
-            for loc_id in sorted(ids):
-                candidates = [(max(self.minutes(loc_id, x) for x in cluster), i)
-                              for i, cluster in enumerate(clusters)]
-                candidates = [c for c in candidates if c[0] <= self.settings["subarea_max_minutes"]]
-                if candidates:
-                    clusters[min(candidates)[1]].append(loc_id)
-                else:
-                    clusters.append([loc_id])
+            clusters = [(lid,) for lid in sorted(ids, key=self.location_order_key)]
+            def shape(cluster):
+                return tuple(sorted(self.location_keys[lid] for lid in cluster))
+            while True:
+                candidates = []
+                for a in range(len(clusters)):
+                    for b in range(a + 1, len(clusters)):
+                        distances = [self.minutes(x, y) for x in clusters[a] for y in clusters[b]]
+                        if max(distances) <= self.settings["subarea_max_minutes"]:
+                            candidates.append((max(distances), sum(distances) / len(distances),
+                                               tuple(sorted((shape(clusters[a]), shape(clusters[b])))), a, b))
+                if not candidates:
+                    break
+                merged = False
+                # Resolve tied competing merges collectively. If their union is dispersed,
+                # leave that ambiguity separate instead of letting an opaque ID choose a side.
+                for rank in sorted({c[:3] for c in candidates}):
+                    ties = [(c[3], c[4]) for c in candidates if c[:3] == rank]
+                    components = []
+                    for a, b in ties:
+                        touching = [component for component in components if a in component or b in component]
+                        union = {a, b}.union(*touching)
+                        components = [component for component in components if component not in touching] + [union]
+                    accepted = []
+                    for component in components:
+                        union = tuple(lid for index in component for lid in clusters[index])
+                        if max(self.minutes(x, y) for x in union for y in union) <= self.settings["subarea_max_minutes"]:
+                            accepted.append((component, union))
+                    if accepted:
+                        consumed = set().union(*(component for component, _ in accepted))
+                        clusters = [cluster for index, cluster in enumerate(clusters) if index not in consumed]
+                        clusters += [union for _, union in accepted]
+                        merged = True
+                        break
+                if not merged:
+                    break
+            clusters.sort(key=lambda cluster: (shape(cluster), tuple(sorted(self.location_order_key(lid) for lid in cluster))))
             for i, cluster in enumerate(clusters, 1):
                 # Structured identity avoids collisions when city/postcode text contains delimiters.
                 area = json.dumps([station, city, postcode, i], ensure_ascii=False, separators=(",", ":"))
@@ -169,12 +271,15 @@ class AssignmentEngine:
         for continuous in (True, False):
             best = None
             best_score = None
+            frontier = {}
+            min_drive = float("inf")
+            min_reentries = float("inf")
             nodes = 0
             exhausted = False
             blocked = set()
 
             def visit(path, remaining, current, now, load, closed, area):
-                nonlocal nodes, exhausted, best, best_score
+                nonlocal nodes, exhausted, best, best_score, min_drive, min_reentries, frontier
                 if nodes >= self.settings["search_node_budget"]:
                     exhausted = True
                     return
@@ -184,10 +289,21 @@ class AssignmentEngine:
                     if r["failures"]:
                         blocked.add("return-to-depot maximum workday")
                         return
-                    score = (r["area_reentries"], r["driving_minutes"],
+                    if r["area_reentries"] > min_reentries:
+                        return
+                    if r["area_reentries"] < min_reentries:
+                        frontier, min_drive, min_reentries = {}, float("inf"), r["area_reentries"]
+                    min_drive = min(min_drive, r["driving_minutes"])
+                    frontier = {drive: value for drive, value in frontier.items()
+                                if drive <= min_drive + self.phase_slack}
+                    score = (*self.phase_cost(path), r["driving_minutes"],
                              r["work_minutes"], r["waiting_minutes"], tuple(path))
-                    if best_score is None or score < best_score:
-                        best, best_score = (tuple(path), r), score
+                    drive = r["driving_minutes"]
+                    if drive <= min_drive + self.phase_slack and (
+                            drive not in frontier or score < frontier[drive][0]):
+                        frontier[drive] = (score, tuple(path))
+                    best_score, order = min(frontier.values())
+                    best = (order, None)
                     return
                 candidates = sorted(remaining, key=lambda t: (
                     self.tasks[t]["window"][1],
@@ -224,7 +340,7 @@ class AssignmentEngine:
                         if continuous_complete else
                         "No contiguous-area ordering found within the search budget; ") + (
                         "observed blockers: " + ", ".join(continuous_reasons))
-                return Schedule(best[0], best[1], (), not exhausted, total_nodes, exception)
+                return Schedule(best[0], self.report(best[0]), (), not exhausted, total_nodes, exception)
             reasons.update(blocked)
             if continuous:
                 continuous_complete = not exhausted
@@ -249,7 +365,8 @@ class AssignmentEngine:
             for tid in ids:
                 bylocation[self.tasks[tid]["location"]].append(tid)
             blocks = []
-            for _, block in sorted(bylocation.items()):
+            for lid in sorted(bylocation, key=self.location_order_key):
+                block = bylocation[lid]
                 if self.schedule(block).report:
                     blocks.append(block)
                 else:
@@ -303,7 +420,7 @@ class AssignmentEngine:
         blocks = defaultdict(list)
         for tid in donor:
             blocks[self.tasks[tid]["location"]].append(tid)
-        blocks = [tuple(v) for _, v in sorted(blocks.items())]
+        blocks = [tuple(blocks[lid]) for lid in sorted(blocks, key=self.location_order_key)]
         nodes = 0
         exhausted = False
         ordering_complete = True
@@ -359,9 +476,10 @@ class AssignmentEngine:
         groups = list(groups)
         while True:
             changed = False
-            low = sorted([g for g in groups if self.schedule(g).report["low_utilization"]],
-                         key=lambda g: (self.schedule(g).report["work_minutes"], tuple(sorted(g))))
-            for donor in low:
+            donors = sorted(groups, key=lambda g: (
+                not self.schedule(g).report["low_utilization"],
+                self.schedule(g).report["work_minutes"], tuple(sorted(g))))
+            for donor in donors:
                 station = self.tasks[donor[0]]["station"]
                 recipients = sorted([g for g in groups if g != donor and self.tasks[g[0]]["station"] == station],
                                     key=lambda g: tuple(sorted(g)))
@@ -371,6 +489,9 @@ class AssignmentEngine:
                     attempts.append({"recipient": sorted(recipient), "reasons": reasons, "geography": geo})
                     if result:
                         score = (result.report["area_reentries"], geo["diameter_base_minutes"],
+                                 self.am_target(result.order)["penalty"] -
+                                 self.am_target(donor)["penalty"] - self.am_target(recipient)["penalty"],
+                                 *self.phase_cost(result.order),
                                  result.report["driving_minutes"], result.report["work_minutes"],
                                  tuple(sorted(recipient)))
                         options.append((score, recipient, result.order))
@@ -392,7 +513,7 @@ class AssignmentEngine:
                                         "attempts": attempts, "search": search})
                     changed = True
                     break
-                self.events.append({"action": "low_utilization_retained", "station": station,
+                self.events.append({"action": "low_utilization_retained" if self.schedule(donor).report["low_utilization"] else "fleet_merge_retained", "station": station,
                                     "source": sorted(donor), "attempts": attempts,
                                     "redistribution": search,
                                     "conclusion": "No feasible merge/redistribution found in the stated search scope."})
@@ -429,11 +550,13 @@ class AssignmentEngine:
                         new_work = [self.schedule(g).report["work_minutes"] for g in station_groups if g not in (donor, recipient)]
                         new_work += [a.report["work_minutes"], b.report["work_minutes"]]
                         improvement = (max(old_work) - min(old_work)) - (max(new_work) - min(new_work))
-                        if improvement > 0 and new_drive <= old_drive + self.settings["max_extra_driving_minutes"]:
-                            options.append((-improvement, new_drive, i, j, a.order, b.order, tuple(block)))
+                        target_delta = (self.am_target(a.order)["penalty"] + self.am_target(b.order)["penalty"] -
+                                        self.am_target(donor)["penalty"] - self.am_target(recipient)["penalty"])
+                        if (target_delta, -improvement) < (0, 0) and new_drive <= old_drive + self.settings["max_extra_driving_minutes"]:
+                            options.append((target_delta, -improvement, new_drive, i, j, a.order, b.order, tuple(block)))
             if not options:
                 break
-            _, _, i, j, a, b, block = min(options)
+            _, _, _, i, j, a, b, block = min(options)
             groups[i], groups[j] = a, b
             self.events.append({"action": "adjacent_workload_balance", "moved": sorted(block),
                                 "donor_after": list(a), "recipient_after": list(b)})
@@ -441,7 +564,7 @@ class AssignmentEngine:
 
     def run(self):
         groups = self.pack_subareas()
-        groups = self.reduce_fleet(self.balance(groups))
+        groups = self.reduce_fleet(groups)
         balanced = self.balance(groups)
         if balanced != groups:
             groups = self.reduce_fleet(balanced)
@@ -472,6 +595,19 @@ class AssignmentEngine:
             continuity[vid] = {**geo, "max_am_pm_base_minutes":
                                max((self.minutes(a, b) for a in am for b in pm), default=None),
                                "ordering_search_complete": result.search_complete}
+            target = self.am_target(group)
+            target["reason"] = (
+                "No configured soft AM target" if not target["configured"] else
+                "Within configured soft range" if target["penalty"] == 0 else
+                "Fleet reduction takes priority over the soft target; geography and hard constraints pass"
+                if target["deviation"] > 0 else
+                "Insufficient normal AM tasks in this vehicle's territory; inspect geographic/constraint merge blockers")
+            continuity[vid]["am_target"] = target
+            continuity[vid]["phase_preference"] = {
+                "pm_before_am_pairs": self.phase_cost(result.order)[0],
+                "handoff_base_minutes": self.phase_cost(result.order)[1],
+                "reason": "Selected among lowest-reentry feasible orders within configured driving slack; appointments are hard, phases are soft",
+                "search_complete": result.search_complete}
         self.data["vehicles"] = vehicles
         report = analyze(self.data)
         report["merge_analysis"] = self.events

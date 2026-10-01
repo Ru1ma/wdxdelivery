@@ -1,7 +1,7 @@
 # Automatic geography-first assignment
 
     python3 -m unittest discover -s tests -v
-    python3 -m wdxdelivery.planner examples/assignment-input.json --plan outputs/plan.json --json outputs/report.json --markdown outputs/report.md
+    python3 -m wdxdelivery.planner examples/correction-input.json --plan outputs/plan.json --json outputs/report.json --markdown outputs/report.md
     python3 -m wdxdelivery outputs/plan.json --json outputs/validated.json --markdown outputs/validated.md
     python3 -m examples.generate_evidence --check
 
@@ -58,17 +58,30 @@ require calibration, and are not verified production parameters.
    reentry. A merge may introduce reentry only when exhaustive contiguous search
    established that no contiguous ordering exists; recorded constraint blockers
    explain it. A budget-limited miss is never called unavoidable.
-5. Balance by moving whole adjacent subareas while both remaining/receiving
-   territories stay connected/compact and feasible. A move must reduce the
-   station workday spread and stay within the explicit driving-detour allowance.
-6. For every low-utilization vehicle, try feasible adjacent merges. If a single
-   recipient cannot absorb it, search whole-location redistribution across
-   same-station recipients. Report successful reductions and exact observed
-   geography/capacity/appointment/workday/cap/detour blockers or search exhaustion.
-   Recheck after balancing; merges strictly decrease vehicle count.
+5. Try adjacent merges and whole-location redistribution for **all** same-station
+   vehicles; low utilization only prioritizes donors. Feasible reductions take
+   precedence over workload tuning. Retained vehicles report observed blockers
+   and bounded-search uncertainty. Balance whole adjacent subareas afterwards,
+   preferring less AM target deviation, then lower spread; recheck reductions.
 
-For feasible orders, prefer fewer area reentries, then less driving, shorter
-work and waiting. Stable task/location keys break ties; no Route IDs participate.
+Seed splitting uses agglomerative complete-link road distance, with ID-free road
+profiles and task attributes for tie resolution. Simultaneous ambiguous road ties
+that cannot collectively meet the diameter bound remain separate; arbitrary
+location-ID renaming cannot choose competing memberships.
+
+Optional `planning.am_delivery_targets` accepts `stations` mapping each station
+ to `{"min": 5, "max": 6}` and `areas` entries containing station, city,
+postcode_area, min and max. Only AM normal Delivery counts. Matching area overrides
+station defaults; if several areas match, the smallest upper target applies.
+Targets are disabled when absent, remain soft, and cannot block a fleet reduction
+or hard geography/appointments/capacity. Reports include deviation and explanation.
+
+Orders first prefer fewer area reentries. Within that class, search establishes
+minimum buffered driving; optional `phase_driving_slack_minutes` (default 0)
+permits similarly efficient orders. Within this band prefer fewer PM-before-AM
+pairs, smaller base-road AM-to-PM handoff, then driving/work/waiting/task keys.
+Phases never override real appointments. Reports show inversions, handoff cost
+and whether ordering search completed; bounded results are scoped evidence.
 Equivalent task permutations are collapsed by location/type/phase/window/load
 and service attributes. The ordering search is bounded, not a globally optimal
 solver. No feasible result found in its scope is not proof that none exists.
@@ -97,8 +110,7 @@ tradeoffs on invented data, not historical fleet or business optimization claims
 
 The planner currently provisions an unrestricted count of homogeneous single-trip
 weight-only vehicles; no real fleet availability, reloads, multi-day windows or
-multidimensional cargo is modeled. Normal-delivery AM targets are reported but
-not a scheduling quota or optimization term. Low utilization is an explicit
+multidimensional cargo is modeled. Normal-delivery AM targets are soft optimization preferences, never hard quotas. Low utilization is an explicit
 test/calibration threshold, not a universal business rule. Greedy clustering,
 packing, conservative graph links and bounded searches can miss better plans.
 
@@ -106,3 +118,11 @@ No raw customer data or private address cache was supplied. The real 343-task
 regression, six-station geography, road provenance, production configuration,
 operational acceptance and remote CI pass remain unverified. No release built.
 Keep private inputs/detailed outputs in ignored data/private/ and outputs/.
+
+Correction evidence is versioned as automatic-correction and correction-comparison;
+previous assignment evidence remains unchanged. `examples.make_stress.stress_fixture`
+generates 104/208 unequal six-station tasks, multiple cities/postcodes, separated
+territories, mixed task types, cargo/service differences, tight AM and delayed PM
+windows, large/zero/missing Route labels. `evidence/diverse-scale.json` records
+integrity, fleet, ordering nodes, bounded queries and successful merges. These
+synthetic growth checks do not establish real 343-task performance.

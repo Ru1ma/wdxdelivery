@@ -232,3 +232,37 @@ Fix those before the next independent review. Continue using synthetic/adversari
 ## Implementation handoff note — 2026-10-01
 
 The implementation response for the automatic-assignment stage remains part of repository history. Its claims are superseded only where this independent review identifies gaps above.
+
+
+## Implementation response — NEEDS_CHANGES corrections, 2026-10-01
+
+Reviewer disposition above is preserved; independent approval is still pending.
+
+1. General fleet reduction: all donors now checked; low-use sorting only. The
+   300/320-minute counterexample merges to 600; separate capacity, appointment,
+   workday and geography counterexamples retain vehicles with explicit blockers.
+2. Road-structural subareas: complete-link agglomeration uses road profiles;
+   ambiguous dispersed ties remain separate. Sixteen asymmetric and eight tied
+   bijective location renamings preserve derived geographic membership and final
+   task territories/metrics, including shuffled locations/arcs.
+3. Soft AM targets: configurable station defaults and city/postcode overrides
+   affect feasible merge/balance choices, exclude Pickup/Redeliver, and report
+   deviation/reasons. Tests demonstrate assignment influence and hard geography/
+   appointment priority; fleet reduction may exceed a target.
+4. Soft AM/PM coherence: equivalent/similarly efficient feasible orders prefer
+   fewer PM-before-AM pairs and smaller handoff. Tests cover equivalent driving,
+   hard PM-first appointments, handoff ties and exhaustive driving-slack oracle.
+5. Larger adverse fixtures: 104/208 uneven six-station tasks, multiple invented
+   cities/postcodes, large/zero/missing Routes, varied weights/services, mixed
+   tasks and tight/flexible windows. Fleet 23/44; nodes 4510/9990; bounded queries
+   8/23; successful adjacent merges 8/1. Runtime one local run 0.0424/0.0870s.
+   All modeled hard constraints and integrity pass; substantial imbalance remains.
+6. Independent baseline, original tests, CLI failures and bounded-search honesty
+   remain covered. 62 tests pass and correction evidence reproduces exactly.
+
+Self-review: evidence generator initially referenced the wrong bounded-query
+field; corrected to bounded_ordering_queries before generation. Historical
+reports are preserved. AM handoff is an annotated road-matrix proxy; phase
+preference and targets are scoped soft heuristics, not global optimality proofs.
+Real-data/calibration/road/operational/CI gates from the Reviewer remain open.
+Exact code SHA and verification commands are in the new REVIEW_REQUEST.

@@ -4,8 +4,38 @@ Updated: 2026-10-01
 
 ## Current stage
 
-**Automatic geography-first assignment, stop ordering, workload balancing and
-adjacent merge/redistribution implemented; synthetic/adversarial review pending.**
+**NEEDS_CHANGES corrections implemented; independent re-review pending.**
+
+Latest reviewer baseline: 3fd6be15ee459749bed73e1eef4f6015150dbe23.
+The following correction evidence supersedes implementation claims below where
+inconsistent; prior measurements/history remain retained.
+
+- General feasible adjacent merge/whole-location redistribution now checks all
+  same-station vehicles; low use only orders donors. Fleet reductions precede
+  soft target/spread tuning and are rechecked afterwards.
+- Road-profile agglomerative complete-link subareas avoid opaque location-ID
+  decisions; assignment-level bijective renaming regressions cover asymmetry/ties.
+- Configurable station/area AM normal Delivery targets influence soft choices;
+  Pickup/Redeliver remain outside that count. Phase ordering minimizes unnecessary
+  inversions/handoff within explicit driving slack, below hard constraints.
+- 62 local tests pass, including all Reviewer counterexamples and a complete
+  phase/slack permutation oracle. CLI output independently passes baseline;
+  new correction evidence regenerates byte-for-byte, historical evidence unchanged.
+- Uneven six-station scale fixtures: 104/208 tasks, 23/44 vehicles, 4510/9990
+  ordering nodes, 8/23 bounded queries, 8/1 successful adjacent merges. Measured
+  one-run local runtime 0.0424/0.0870 seconds; not a production benchmark.
+  Missing/duplicate/unknown/cross-station counts are all zero, hard checks pass.
+- New evidence: automatic-correction.json/.md, correction-comparison.json,
+  diverse-scale.json. The 30-task paired result remains 12 vehicles, 1104 km,
+  1656 driving, 1752 waiting, 3888 work minutes, spread 68 and six reentries.
+  Targets can remain below range because geography/appointments dominate.
+
+Open: bounded/conservative searches can miss reductions; stress fixtures retain
+large workload spread. Private 343-task regression, real roads/calibration,
+operational acceptance and remote CI remain unavailable/unverified. Next step:
+independent review of exact implementation SHA in REVIEW_REQUEST, then private
+regression and geographic inspection when authorized inputs are available.
+No packaging/release or production readiness claim.
 
 Baseline scaffolding was approved READY_FOR_NEXT_STAGE at reviewer commit
 062f4787aba835e3102df6a55493b302d17b2216. That approval is not algorithm or

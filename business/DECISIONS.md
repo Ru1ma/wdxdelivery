@@ -101,3 +101,25 @@ remove collisions. A proposed Pickup redistribution counterexample did not block
 all direct merges after delivery unload; it was replaced with a verified 140 kg
 combined delivery vs 100 kg-capacity case. Final tests verify redistribution can
 eliminate that vehicle by splitting its location blocks across neighbors.
+
+
+## 2026-10-01 — NEEDS_CHANGES correction decisions
+
+- Remove low-utilization eligibility gate: all same-station donors receive scoped
+  feasible adjacent merge/redistribution checks. Low use is priority only; fleet
+  reduction precedes fine workload tuning, with another check after balance.
+- Replace location-ID greedy seed partition with complete-link agglomeration on
+  road distance and ID-free profiles. Competing tied edges whose collective union
+  exceeds diameter remain separate. Task identity only resolves final otherwise
+  symmetric ordering; location names cannot change geography.
+- Optional AM target policy is station default plus exact city/postcode override;
+  smallest upper target governs vehicles covering several matching overrides.
+  Only AM Delivery counts. No config means disabled. Targets cannot block fleet
+  reduction/hard feasibility. Example 5–6 ranges are invented soft settings.
+- Phase preference compares minimum-reentry feasible schedules within explicit
+  buffered-driving slack: inversions, base-road handoff, driving/work/wait/task
+  keys. Handoff skips flexible annotations and is a road-matrix proxy, not actual
+  traversed path. Defaults permit no driving increase; appointments always prevail.
+- Preserve historical evidence; correction outputs have new filenames. Diverse
+  growth fixtures are fully invented and report bounded queries honestly. Large
+  retained spread and synthetic timings are not operational optimization proof.

@@ -1,0 +1,50 @@
+{
+  "after": {
+    "Delivery": 18,
+    "Pickup": 6,
+    "Redeliver": 6,
+    "driving_minutes": 1656.0,
+    "km": 1104.0,
+    "longest_minutes": 358.0,
+    "metrics_available": true,
+    "service_minutes": 300,
+    "shortest_minutes": 290.0,
+    "spread_minutes": 68.0,
+    "total_tasks": 30,
+    "vehicles": 12,
+    "waiting_minutes": 1752.0,
+    "work_minutes": 3888.0
+  },
+  "after_reentries": 6,
+  "basis": "synthetic only; identical task windows, locations and configuration for both plans",
+  "before": {
+    "Delivery": 18,
+    "Pickup": 6,
+    "Redeliver": 6,
+    "driving_minutes": 1764.0,
+    "km": 1176.0,
+    "longest_minutes": 358.0,
+    "metrics_available": true,
+    "service_minutes": 300,
+    "shortest_minutes": 296.0,
+    "spread_minutes": 62.0,
+    "total_tasks": 30,
+    "vehicles": 12,
+    "waiting_minutes": 1680.0,
+    "work_minutes": 3924.0
+  },
+  "before_reentries": 12,
+  "delta": {
+    "driving_minutes": -108.0,
+    "km": -72.0,
+    "longest_minutes": 0.0,
+    "service_minutes": 0,
+    "shortest_minutes": -6.0,
+    "spread_minutes": 6.0,
+    "vehicles": 0,
+    "waiting_minutes": 72.0,
+    "work_minutes": -36.0
+  },
+  "fixture_note": "AM windows explicitly end at minute 180 in the paired input; historical reports are retained.",
+  "geographic_review": "pending real/private input; no historical/production optimization claim"
+}
